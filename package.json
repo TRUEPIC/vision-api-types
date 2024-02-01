@@ -1,0 +1,11 @@
+{
+  "name": "vision-api-types",
+  "version": "1.0.0",
+  "description": "Vision API Types",
+  "license": "UNLICENSED",
+  "repository": "TRUEPIC/vision-api-types",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "type": "module"
+}
