@@ -1,0 +1,18 @@
+export enum ListType {
+  EVENT_TEMPLATE = 'EVENT_TEMPLATE',
+  EVENT_INSTANCE = 'EVENT_INSTANCE',
+  SURVEY_TEMPLATE = 'SURVEY_TEMPLATE',
+  SURVEY_INSTANCE = 'SURVEY_INSTANCE',
+}
+
+export enum ListItemType {
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  PHOTO = 'PHOTO',
+  QUESTION = 'QUESTION',
+}
+
+export enum ListItemQuestionType {
+  TEXT = 'TEXT',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+}

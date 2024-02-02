@@ -4,11 +4,13 @@
   "description": "Vision API Types",
   "license": "UNLICENSED",
   "repository": "TRUEPIC/vision-api-types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "cp -r types/* dist && tsc",
     "clean": "tsc --build --clean"
   },
   "type": "module"
