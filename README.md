@@ -14,3 +14,10 @@ command:
 ```sh
 npm run build
 ```
+
+## Global
+
+In order to use these types in your project, you need to add the global
+types from `src/global.d.ts` to your project manually.
+    
+    
