@@ -3,12 +3,10 @@
     "module": "esnext",
     "target": "ESNext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "moduleResolution": "Node",
-    "lib": ["ESNext"],
+    "lib": ["dom", "ESNext"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
-    "outDir": "dist",
-    "declaration": true
   }
 }
