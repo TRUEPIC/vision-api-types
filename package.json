@@ -1,6 +1,6 @@
 {
   "name": "vision-api-types",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Vision API Types",
   "license": "UNLICENSED",
   "repository": "TRUEPIC/vision-api-types",
@@ -10,7 +10,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "build": "cp -r types/* dist && tsc",
+    "build": "mkdir -p dist/types && cp -r types/* dist/types && tsc",
     "clean": "tsc --build --clean"
   },
   "type": "module"
