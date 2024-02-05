@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** An entry marking an email address that has unsubscribed from emails from a specific organization. */
 export interface UnsubscribedEmail extends PsqlTimestamps {

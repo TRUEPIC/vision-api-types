@@ -1,5 +1,5 @@
-import { PsqlTimestamps } from '@/types/Psql'
-import { VisionRole } from '@/types/enums/VisionRole'
+import { PsqlTimestamps } from '../Psql'
+import { VisionRole } from '../enums/VisionRole'
 
 /** A authorization role in the Vision system */
 export interface Role extends PsqlTimestamps {

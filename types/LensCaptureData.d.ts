@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from './Psql'
 export interface LensCaptureData
   extends PsqlTimestamps,
     TruepicVerificationStatus {

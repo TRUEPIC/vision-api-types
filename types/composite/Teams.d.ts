@@ -1,8 +1,8 @@
-import { Team } from '@/types/schemas/Team'
-import { Group } from '@/types/schemas/Group'
-import { PopulatedInspectionType } from '@/types/composite/InspectionTypes'
-import { PopulatedList } from '@/types/composite/Lists'
-import { TeamWebhook } from '@/types/schemas/TeamWebhook'
+import { Team } from '../schemas/Team'
+import { Group } from '../schemas/Group'
+import { PopulatedInspectionType } from '../composite/InspectionTypes'
+import { PopulatedList } from '../composite/Lists'
+import { TeamWebhook } from '../schemas/TeamWebhook'
 
 /** A team with attached info for that team
  * @internal

@@ -1,5 +1,5 @@
-import { PopulatedTeam } from '@/types/composite/Teams'
-import { PaginationResult, ResponseData } from '@/types/api/ResponseData'
+import { PopulatedTeam } from '../composite/Teams'
+import { PaginationResult, ResponseData } from '../api/ResponseData'
 
 export type GetTeamsResult = ResponseData &
   PaginationResult & {

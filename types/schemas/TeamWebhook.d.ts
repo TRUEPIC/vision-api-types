@@ -1,5 +1,5 @@
-import { PsqlTimestamps } from '@/types/Psql'
-import { VisionAPIVersion } from '@/types/enums/VisionAPIVersion'
+import { PsqlTimestamps } from '../Psql'
+import { VisionAPIVersion } from '../enums/VisionAPIVersion'
 
 /** A configuration object for a webhook triggered for a team when an inspection is updated */
 export interface TeamWebhook extends PsqlTimestamps {

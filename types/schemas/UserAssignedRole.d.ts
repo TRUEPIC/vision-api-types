@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A mapping between a user, an organization, and a role. Signifies that this user has this role on this organization. */
 export interface UserAssignedRole extends PsqlTimestamps {

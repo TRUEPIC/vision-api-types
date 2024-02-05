@@ -1,4 +1,4 @@
-import { Role } from '@/types/schemas/Role'
+import { Role } from '../schemas/Role'
 
 /**
  * @internal

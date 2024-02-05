@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A set of possible options that a user can select from when creating an inspection */
 export interface CustomFieldOptionSet extends PsqlTimestamps {

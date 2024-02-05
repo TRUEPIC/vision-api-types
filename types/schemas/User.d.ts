@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A user of Vision. This could be a Vision website user or mobile app user. */
 export interface User extends PsqlTimestamps {

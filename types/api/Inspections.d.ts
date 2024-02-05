@@ -1,12 +1,12 @@
-import { Inspection } from '@/types/schemas/Inspection'
-import { ResponseData, PaginationResult } from '@/types/api/ResponseData'
-import { VehicleDetail } from '@/types/schemas/VehicleDetail'
-import { InspectionWithUniqueIDs } from '@/types/composite/InspectionWithUniqueIDs'
+import { Inspection } from '../schemas/Inspection'
+import { ResponseData, PaginationResult } from '../api/ResponseData'
+import { VehicleDetail } from '../schemas/VehicleDetail'
+import { InspectionWithUniqueIDs } from '../composite/InspectionWithUniqueIDs'
 import {
   PopulatedInspection,
   InspectionPartial,
-} from '@/types/composite/Inspections'
-import { PopulatedList } from '@/types/composite/Lists'
+} from '../composite/Inspections'
+import { PopulatedList } from '../composite/Lists'
 
 /** Response Body for GET /inspections */
 export type GetInspectionsResult = ResponseData &

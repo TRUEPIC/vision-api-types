@@ -1,6 +1,6 @@
-import { PsqlTimestamps } from '@/types/Psql'
-import { ListType } from '@/types/enums/List'
-import { ListItemGroups } from '@/types/composite/Lists'
+import { PsqlTimestamps } from '../Psql'
+import { ListType } from '../enums/List'
+import { ListItemGroups } from '../composite/Lists'
 
 /** A list of photos/videos and questions to prompt the customer for during an inspection. */
 export interface List extends PsqlTimestamps {

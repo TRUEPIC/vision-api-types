@@ -1,4 +1,4 @@
-import { CustomFieldEntryMethods } from '@/types/enums/CustomFieldEntryMethods'
+import { CustomFieldEntryMethods } from './enums/CustomFieldEntryMethods'
 
 export interface CustomField {
   /** The label for the custom field

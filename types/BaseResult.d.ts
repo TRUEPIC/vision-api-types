@@ -1,4 +1,4 @@
-import { TestResult, TruepicResultReason } from '@/types/enums/Verification'
+import { TestResult, TruepicResultReason } from './enums/Verification'
 
 /** The result of a test. Used as a base schema for other test result types. */
 export interface BaseResult {

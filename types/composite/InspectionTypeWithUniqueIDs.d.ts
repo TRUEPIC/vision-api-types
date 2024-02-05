@@ -1,8 +1,8 @@
-import type { InspectionType } from '@/types/schemas/InspectionType'
-import type { CustomField } from '@/types/CustomField'
-import type { TeamSimple } from '@/types/composite/TeamSimple'
+import type { InspectionType } from '../schemas/InspectionType'
+import type { CustomField } from '../CustomField'
+import type { TeamSimple } from '../composite/TeamSimple'
 
-import { CustomFieldEntryMethods } from '@/types/enums/CustomFieldEntryMethods'
+import { CustomFieldEntryMethods } from '../enums/CustomFieldEntryMethods'
 
 /**
  * This type represents an Inspection with the deprecated Unique ID fields for compatibility

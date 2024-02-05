@@ -1,5 +1,5 @@
-import { CreateInspectionProps } from '@/types/api/Inspections'
-import { ResponseData } from '@/types/api/ResponseData'
+import { CreateInspectionProps } from '../api/Inspections'
+import { ResponseData } from '../api/ResponseData'
 
 /** The request body for PUT /text/welcome */
 export type SendWelcomeTextBody = Pick<

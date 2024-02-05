@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** An action that occurred on an inspection.
  * These appear in the inspection timeline and some will trigger webhooks for the team associated with the inspection.

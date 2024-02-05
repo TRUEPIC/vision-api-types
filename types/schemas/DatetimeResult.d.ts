@@ -1,4 +1,4 @@
-import { BaseResult } from '@/types/BaseResult'
+import { BaseResult } from '../BaseResult'
 
 /** The result of a date-time test.
  * Ensures the accuracy of the device’s time and date, and confirms that they were not modified. */

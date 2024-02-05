@@ -1,10 +1,10 @@
-import type { MessageTemplateSet } from '@/types/schemas/MessageTemplateSet'
-import type { PopulatedList } from '@/types/composite/Lists'
-import type { InspectionTypeWithUniqueIDs } from '@/types/composite/InspectionTypeWithUniqueIDs'
-import type { TeamSimple } from '@/types/composite/TeamSimple'
-import type { OutcomeSet } from '@/types/schemas/OutcomeSet'
-import type { InspectionAlertConfig } from '@/types/schemas/InspectionAlertConfig'
-import type { PopulatedCustomField } from '@/types/CustomField'
+import type { MessageTemplateSet } from '../schemas/MessageTemplateSet'
+import type { PopulatedList } from '../composite/Lists'
+import type { InspectionTypeWithUniqueIDs } from '../composite/InspectionTypeWithUniqueIDs'
+import type { TeamSimple } from '../composite/TeamSimple'
+import type { OutcomeSet } from '../schemas/OutcomeSet'
+import type { InspectionAlertConfig } from '../schemas/InspectionAlertConfig'
+import type { PopulatedCustomField } from '../CustomField'
 
 /** An inspection type with attached list and message template set data
  * @internal

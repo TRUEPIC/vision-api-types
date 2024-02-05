@@ -1,4 +1,4 @@
-import { Organization } from '@/types/schemas/Organization'
+import { Organization } from '../schemas/Organization'
 
 /**
  * @internal

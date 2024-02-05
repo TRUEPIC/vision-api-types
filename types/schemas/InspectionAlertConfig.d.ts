@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** An alert configuration for an organization.
  * Notifies an organization when an list items on an inspection do not pass the configured tests.

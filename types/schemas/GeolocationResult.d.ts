@@ -1,4 +1,4 @@
-import { BaseResult } from '@/types/BaseResult'
+import { BaseResult } from '../BaseResult'
 
 /** The result of a geolocation test.
  * Ensures the GPS data matches the true location of the image. */

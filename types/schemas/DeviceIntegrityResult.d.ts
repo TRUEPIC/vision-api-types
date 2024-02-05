@@ -1,4 +1,4 @@
-import { BaseResult } from '@/types/BaseResult'
+import { BaseResult } from '../BaseResult'
 
 /** The result of a device test.
  * Identifies compromised devices which could allow for image tampering. */

@@ -1,4 +1,4 @@
-import type { Inspection } from '@/types/schemas/Inspection'
+import type { Inspection } from '../schemas/Inspection'
 
 /**
  * This type represents an Inspection Type with the old Inspection Type fields for compatibility

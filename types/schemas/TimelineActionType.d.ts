@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A type of action that can occur an inspection. */
 export interface TimelineActionType extends PsqlTimestamps {

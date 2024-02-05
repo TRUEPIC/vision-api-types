@@ -1,5 +1,5 @@
-import { PsqlTimestamps } from '@/types/Psql'
-import { TestResult } from '@/types/enums/Verification'
+import { PsqlTimestamps } from '../Psql'
+import { TestResult } from '../enums/Verification'
 
 /** A photo or video (if enabled for the organization) from an inspection request. */
 export interface Truepic extends PsqlTimestamps {

@@ -1,5 +1,5 @@
-import { BaseResult } from '@/types/BaseResult'
-import { PopResultStatus } from '@/types/enums/Verification'
+import { BaseResult } from '../BaseResult'
+import { PopResultStatus } from '../enums/Verification'
 
 /** The result of a picture-of-paper test.
  * Using a series of image forensics tests ensures that the image was not re-captured from a pre-existing photo on a screen or a printout. */

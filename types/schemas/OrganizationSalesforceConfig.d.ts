@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** Configuration settings for an organization's Salesforce integration */
 export interface OrganizationSalesforceConfig extends PsqlTimestamps {

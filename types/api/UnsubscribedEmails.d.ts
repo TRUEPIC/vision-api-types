@@ -1,5 +1,5 @@
-import { ResponseData, PaginationResult } from '@/types/api/ResponseData'
-import { UnsubscribedEmail } from '@/types/schemas/UnsubscribedEmail'
+import { ResponseData, PaginationResult } from '../api/ResponseData'
+import { UnsubscribedEmail } from '../schemas/UnsubscribedEmail'
 
 /** Response Body for GET /emails/unsubscribed-email */
 export type GetUnsubscribedEmailsResult = ResponseData &

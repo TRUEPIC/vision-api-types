@@ -1,6 +1,6 @@
-import { VerificationResult } from '@/types/enums/Verification'
-import { InspectionStatusId } from '@/types/enums/InspectionStatusId'
-import { PsqlTimestamps } from '@/types/Psql'
+import { VerificationResult } from '../enums/Verification'
+import { InspectionStatusId } from '../enums/InspectionStatusId'
+import { PsqlTimestamps } from '../Psql'
 
 /** The core resource representing an inspection request */
 export interface Inspection extends PsqlTimestamps {

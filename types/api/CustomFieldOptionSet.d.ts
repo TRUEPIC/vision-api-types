@@ -1,6 +1,6 @@
-import { CustomFieldOptionSet } from '@/types/schemas/CustomFieldOptionSet'
-import { PopulatedCustomFieldOptionSet } from '@/types/composite/CustomFieldOptionSet'
-import { PaginationResult, ResponseData } from '@/types/api/ResponseData'
+import { CustomFieldOptionSet } from '../schemas/CustomFieldOptionSet'
+import { PopulatedCustomFieldOptionSet } from '../composite/CustomFieldOptionSet'
+import { PaginationResult, ResponseData } from '../api/ResponseData'
 
 export type GetCustomFieldOptionSetsResult = ResponseData &
   PaginationResult & {

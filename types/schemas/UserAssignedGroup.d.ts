@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A mapping between a user and a group. Signifies that this user has access to this group. */
 export interface UserAssignedGroup extends PsqlTimestamps {

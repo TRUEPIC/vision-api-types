@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A Team that exists under an organization in Vision that sends out inspection requests */
 export interface Team extends PsqlTimestamps {

@@ -1,12 +1,12 @@
-import { Truepic } from '@/types/schemas/Truepic'
-import { TestResult } from '@/types/enums/Verification'
-import { Container } from '@/types/schemas/Container'
-import { DatetimeResult } from '@/types/schemas/DatetimeResult'
-import { GeolocationResult } from '@/types/schemas/GeolocationResult'
-import { RisResult } from '@/types/schemas/RisResult'
-import { PopResult } from '@/types/schemas/PopResult'
-import { ContentAnalysisResult } from '@/types/schemas/ContentAnalysisResult'
-import { ObjectDetectionResult } from '@/types/schemas/ObjectDetectionResult'
+import { Truepic } from '../schemas/Truepic'
+import { TestResult } from '../enums/Verification'
+import { Container } from '../schemas/Container'
+import { DatetimeResult } from '../schemas/DatetimeResult'
+import { GeolocationResult } from '../schemas/GeolocationResult'
+import { RisResult } from '../schemas/RisResult'
+import { PopResult } from '../schemas/PopResult'
+import { ContentAnalysisResult } from '../schemas/ContentAnalysisResult'
+import { ObjectDetectionResult } from '../schemas/ObjectDetectionResult'
 
 /** A truepic object with all related data
  * @internal

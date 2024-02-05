@@ -1,4 +1,4 @@
-import { ResponseData } from '@/types/api/ResponseData'
+import { ResponseData } from '../api/ResponseData'
 
 interface AppSettings {
   id: number

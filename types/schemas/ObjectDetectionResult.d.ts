@@ -1,5 +1,5 @@
-import { BaseResult } from '@/types/BaseResult'
-import { ObjectDetectionResultDetails } from '@/types/composite/ObjectDetection'
+import { BaseResult } from '../BaseResult'
+import { ObjectDetectionResultDetails } from '../composite/ObjectDetection'
 
 /** The result of an object detection test.
  * Automatically detects whether the expected object was found to be in the picture. */

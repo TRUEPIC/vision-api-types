@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A reference object between a team and a group*/
 export interface GroupAssignedOrganization extends PsqlTimestamps {

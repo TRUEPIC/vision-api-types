@@ -1,4 +1,4 @@
-import type { Team } from '@/types/schemas/Team'
+import type { Team } from '../schemas/Team'
 
 /**
  * @internal

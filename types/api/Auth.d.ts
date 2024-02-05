@@ -1,7 +1,7 @@
-import { PopulatedUser } from '@/types/composite/Users'
-import { Provider } from '@/types/Provider'
-import { Team } from '@/types/schemas/Team'
-import { ResponseData } from '@/types/api/ResponseData'
+import { PopulatedUser } from '../composite/Users'
+import { Provider } from '../Provider'
+import { Team } from '../schemas/Team'
+import { ResponseData } from '../api/ResponseData'
 
 /** The result for GET /auth/user */
 export type GetLoggedInUserResult = {

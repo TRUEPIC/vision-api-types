@@ -1,10 +1,10 @@
-import { User } from '@/types/schemas/User'
-import { PopulatedTeam } from '@/types/composite/Teams'
-import { SerializedOrganization } from '@/types/composite/Organizations'
-import { SerializedRole } from '@/types/composite/Roles'
-import { SerializedGroup } from '@/types/composite/Groups'
-import { EmailToken } from '@/types/EmailToken'
-import { Provider } from '@/types/Provider'
+import { User } from '../schemas/User'
+import { PopulatedTeam } from '../composite/Teams'
+import { SerializedOrganization } from '../composite/Organizations'
+import { SerializedRole } from '../composite/Roles'
+import { SerializedGroup } from '../composite/Groups'
+import { EmailToken } from '../EmailToken'
+import { Provider } from '../Provider'
 
 /** The properties that can be attached to the Express req.user object
  * @internal

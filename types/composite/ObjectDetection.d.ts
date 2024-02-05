@@ -3,7 +3,7 @@ import {
   ObjectDetectionObject,
   ObjectDetectionWarningMethodology,
   ApplianceRiskLevel,
-} from '@/types/enums/ObjectDetection'
+} from '../enums/ObjectDetection'
 
 export type ObjectDetectionConfig = {
   /** The category of item expected in this list item

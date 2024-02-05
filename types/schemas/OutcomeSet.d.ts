@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A set of outcomes possible when closing an inspection. Specific to each organization. */
 export interface OutcomeSet extends PsqlTimestamps {

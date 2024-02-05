@@ -1,5 +1,5 @@
-import { LensCaptureData } from '@/types/LensCaptureData'
-import { BaseResult } from '@/types/BaseResult'
+import { LensCaptureData } from '../LensCaptureData'
+import { BaseResult } from '../BaseResult'
 
 /** The result of a capture integrity test. Ensures the details that are
  * cryptographically signed into the file are verified and confirms

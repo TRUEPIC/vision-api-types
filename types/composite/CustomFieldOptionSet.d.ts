@@ -1,5 +1,5 @@
-import type { CustomFieldOptionSet } from '@/types/schemas/CustomFieldOptionSet'
-import type { InspectionType } from '@/types/schemas/InspectionType'
+import type { CustomFieldOptionSet } from '../schemas/CustomFieldOptionSet'
+import type { InspectionType } from '../schemas/InspectionType'
 
 export type PopulatedCustomFieldOptionSet = CustomFieldOptionSet & {
   /*

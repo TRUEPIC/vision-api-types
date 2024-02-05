@@ -1,5 +1,5 @@
-import { TestResult, SafesearchResult } from '@/types/enums/Verification'
-import { BaseResult } from '@/types/BaseResult'
+import { TestResult, SafesearchResult } from '../enums/Verification'
+import { BaseResult } from '../BaseResult'
 
 /** The result of a reverse-image-search test.
  * Detects similar images from across the internet. */

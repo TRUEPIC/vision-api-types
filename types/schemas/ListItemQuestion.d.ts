@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A question on a list item */
 export interface ListItemQuestion extends PsqlTimestamps {

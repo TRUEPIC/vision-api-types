@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A group of users (self initiated inspectors) who can login to the app to create and perform inspections. */
 export interface Group extends PsqlTimestamps {

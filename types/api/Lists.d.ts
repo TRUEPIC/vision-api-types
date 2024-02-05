@@ -1,6 +1,6 @@
-import { List } from '@/types/schemas/List'
-import { PopulatedList } from '@/types/composite/Lists'
-import { PaginationResult, ResponseData } from '@/types/api/ResponseData'
+import { List } from '../schemas/List'
+import { PopulatedList } from '../composite/Lists'
+import { PaginationResult, ResponseData } from '../api/ResponseData'
 
 /** The response body for GET /lists */
 export type GetListsResult = ResponseData &

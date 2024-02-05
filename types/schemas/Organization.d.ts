@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** An organization that uses Truepic to create inspections. */
 export interface Organization extends PsqlTimestamps {

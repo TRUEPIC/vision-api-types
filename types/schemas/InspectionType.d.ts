@@ -1,5 +1,5 @@
-import type { PsqlTimestamps } from '@/types/Psql'
-import type { CustomField } from '@/types/CustomField'
+import type { PsqlTimestamps } from '../Psql'
+import type { CustomField } from '../CustomField'
 
 /** The core resource representing an inspection request */
 export interface InspectionType extends PsqlTimestamps {

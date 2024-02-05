@@ -1,4 +1,4 @@
-import { ContentAnalysisType } from '@/types/enums/ContentAnalysis'
+import { ContentAnalysisType } from '../enums/ContentAnalysis'
 
 export type ContentAnalysisResultDetails = {
   /** The type of the content analysis test. Must be VIN or ODOMETER .

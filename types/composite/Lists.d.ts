@@ -1,7 +1,7 @@
-import { List } from '@/types/schemas/List'
-import { ListItem } from '@/types/schemas/ListItem'
-import { InspectionType } from '@/types/schemas/InspectionType'
-import { ListItemQuestion } from '@/types/schemas/ListItemQuestion'
+import { List } from '../schemas/List'
+import { ListItem } from '../schemas/ListItem'
+import { InspectionType } from '../schemas/InspectionType'
+import { ListItemQuestion } from '../schemas/ListItemQuestion'
 
 export type ListItemGroups = Record<string, { name: string }>
 

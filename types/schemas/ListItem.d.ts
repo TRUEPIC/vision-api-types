@@ -1,6 +1,6 @@
-import { PsqlTimestamps } from '@/types/Psql'
-import { ObjectDetectionConfig } from '@/types/composite/ObjectDetection'
-import { ListItemType } from '@/types/enums/List'
+import { PsqlTimestamps } from '../Psql'
+import { ObjectDetectionConfig } from '../composite/ObjectDetection'
+import { ListItemType } from '../enums/List'
 
 /** A photo/video or question to prompt the customer for during an inspection. */
 export interface ListItem extends PsqlTimestamps {

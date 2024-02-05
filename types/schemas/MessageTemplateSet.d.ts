@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A set of templates used for messages sent via email or text to an app user */
 export interface MessageTemplateSet extends PsqlTimestamps {

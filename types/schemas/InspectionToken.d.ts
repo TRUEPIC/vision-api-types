@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A token used to authenticate Truepics sent from app users to the Vision API. */
 export interface InspectionToken extends PsqlTimestamps {

@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** A long-running background job that can be tracked to monitor its progress, such as a PDF export. */
 export interface Operation extends PsqlTimestamps {

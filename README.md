@@ -7,7 +7,8 @@ be used in conjunction with the Vision API client libraries.
 
 The files in this directory are just copied from the types directory
 in `vision-api`.  If you are going to update the types, copy the `src/types`
-directory from `vision-api` to this directory and then run the following
+directory from `vision-api` to this directory. You then need to
+change all of the imports are relative. Then run the following
 command:
     
 ```sh

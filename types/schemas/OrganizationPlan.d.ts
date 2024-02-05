@@ -1,4 +1,4 @@
-import { PsqlTimestamps } from '@/types/Psql'
+import { PsqlTimestamps } from '../Psql'
 
 /** The plan an organization has for with Truepic Vision.  */
 export interface OrganizationPlan extends PsqlTimestamps {
