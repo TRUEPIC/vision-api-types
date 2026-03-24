@@ -1,17 +1,30 @@
 {
-  "name": "vision-api-types",
-  "version": "1.11.0",
-  "description": "Vision API Types",
-  "license": "UNLICENSED",
-  "repository": "TRUEPIC/vision-api-types",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "devDependencies": {
-    "@types/node": "^20.11.16",
-    "typescript": "^5.3.3"
+  "name": "@truepic/vision-api-types",
+  "version": "3.74.0",
+  "description": "TypeScript type declarations for Truepic Vision API v3",
+  "bugs": "https://github.com/TRUEPIC/vision-api-types/issues",
+  "license": "MIT",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TRUEPIC/vision-api-types.git"
   },
+  "files": [
+    "index.d.ts"
+  ],
   "scripts": {
-    "build": "tsc"
+    "generate": "openapi-typescript https://vision-api.truepic.com/v3/open-api -o index.d.ts",
+    "validate": "tsc --noEmit --strict index.d.ts"
   },
-  "type": "module"
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "release-it": "^19.2.4",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
