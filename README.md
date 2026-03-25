@@ -2,7 +2,9 @@
 
 TypeScript type declarations for Truepic Vision API v3.
 
-![npm version](https://img.shields.io/npm/v/@truepic/vision-api-types?color=196dff)
+<a href="https://www.npmjs.com/package/@truepic/vision-api-types">
+  <img src="https://img.shields.io/npm/v/@truepic/vision-api-types?color=196dff" alt="npm">
+</a>
 
 ## Installation
 
