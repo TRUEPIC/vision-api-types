@@ -2,6 +2,8 @@
 
 TypeScript type declarations for Truepic Vision API v3.
 
+![npm version](https://img.shields.io/npm/v/@truepic/vision-api-types?color=196dff)
+
 ## Installation
 
 ```bash

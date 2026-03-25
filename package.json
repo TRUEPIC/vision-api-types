@@ -1,6 +1,6 @@
 {
   "name": "@truepic/vision-api-types",
-  "version": "3.74.0",
+  "version": "0.1.0",
   "description": "TypeScript type declarations for Truepic Vision API v3",
   "bugs": "https://github.com/TRUEPIC/vision-api-types/issues",
   "license": "MIT",
@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "generate": "openapi-typescript https://vision-api.truepic.com/v3/open-api -o index.d.ts",
+    "release": "release-it --only-version",
     "validate": "tsc --noEmit --strict index.d.ts"
   },
   "devDependencies": {
