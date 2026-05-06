@@ -2694,46 +2694,6 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AIAnalysisSet: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the user that created this AI Analysis Set.
-             * @example 894
-             */
-            created_by_user_id: number;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            is_deleted: unknown;
-            /**
-             * @description The id of the user that last edited this AI Analysis Set.
-             * @example 542
-             */
-            modified_by_user_id?: number;
-            /**
-             * @description The name of the AI Analysis Set
-             * @example AI Analysis Set Name
-             */
-            name: string;
-            /**
-             * @description The id of the organization that owns this AI Analysis Set
-             * @example 532
-             */
-            organization_id: number;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         AIAnalysisSetPayload: {
             /**
              * Format: date-time
@@ -2838,13 +2798,6 @@ export interface components {
             criteriaEvaluation: components["schemas"]["AIInspectionCriteriaEvaluationResultV1"][] | unknown;
             schema_version: number;
         };
-        AIInspectionReadyResultQueryMetricsV1: {
-            cachedTokens: number;
-            inputTokens: number;
-            outputTokens: number;
-            queryTimeMs: number;
-            totalCostUSD: number;
-        };
         /** @description The details of the AI status for an inspection */
         AIStatusDetails: {
             /** @description AI analyses per-list-item */
@@ -2923,6 +2876,338 @@ export interface components {
             expected_required?: boolean;
             /** @description The result of the content analysis test. Will be a number representing the number on the vehicle odometer for ODOMETER tests. Will be a string representing the VIN number on the vehicle for VIN tests. Will be a string representing the DOT TIN on the vehicle tire for DOT TIN tests. Will be a 2D array of matched strings per each text matching set for TEXT_MATCHING tests. Will be an array of matched strings for CUSTOM_FIELD_MATCHING tests. */
             result: number | string | unknown | string[][] | string[];
+            /** @description Additional detailed result data, depending on the content analysis type */
+            result_details?: {
+                /** @description Decoded components */
+                components: {
+                    /** @description Check digit validation */
+                    checkDigit?: {
+                        /** @description Actual check digit from the VIN */
+                        actual: string;
+                        /** @description Expected check digit based on calculation */
+                        expected?: string;
+                        /** @description Whether the check digit is valid */
+                        isValid: boolean;
+                        /** @description Position in the VIN (typically 9) */
+                        position: number;
+                    };
+                    /** @description Engine specifications */
+                    engine?: {
+                        /** @description Number of cylinders */
+                        cylinders?: string;
+                        /** @description Engine displacement in liters */
+                        displacement?: string;
+                        /** @description Fuel type */
+                        fuel?: string;
+                        /** @description Engine model code */
+                        model?: string;
+                        /** @description Engine power (HP) */
+                        power?: string;
+                        /** @description Engine type */
+                        type?: string;
+                    };
+                    /** @description Model year information */
+                    modelYear?: {
+                        /** @description Confidence in the year (0-1) */
+                        confidence: number;
+                        /**
+                         * @description Source of the year determination
+                         * @enum {string}
+                         */
+                        source: "position" | "override" | "calculated";
+                        /** @description Determined model year */
+                        year: number;
+                    };
+                    /** @description Manufacturing plant information */
+                    plant?: {
+                        /** @description Manufacturing city */
+                        city?: string;
+                        /** @description Plant code (from VIN position 11) */
+                        code: string;
+                        /** @description Manufacturing country */
+                        country: string;
+                        /** @description Plant operator/manufacturer */
+                        manufacturer?: string;
+                    };
+                    /** @description Vehicle Descriptor Section patterns */
+                    vds?: {
+                        patterns: {
+                            /** @description Attribute ID */
+                            attributeId: string | null;
+                            /** @description Element code */
+                            code: string;
+                            /** @description Confidence score (0-1) */
+                            confidence: number;
+                            /** @description Element name (e.g., "Model", "Body Class") */
+                            element: string;
+                            /** @description Additional metadata */
+                            metadata?: {
+                                /** @description Element weight for priority */
+                                elementWeight?: number;
+                                /** @description Group name */
+                                groupName?: string;
+                                /** @description Lookup table name */
+                                lookupTable?: string;
+                                /** @description Match details */
+                                matchDetails?: {
+                                    exactMatches?: number;
+                                    totalPositions?: number;
+                                    wildcardMatches?: number;
+                                };
+                                /**
+                                 * @description Pattern type
+                                 * @enum {string}
+                                 */
+                                patternType?: "VDS" | "VIS";
+                                /** @description Original pattern string */
+                                rawPattern?: string;
+                            };
+                            /** @description VIN positions covered by this pattern */
+                            positions: number[];
+                            /** @description Schema name */
+                            schema: string;
+                            /** @description Decoded value */
+                            value: string | null;
+                        }[];
+                        raw: string;
+                    };
+                    /** @description Core vehicle information */
+                    vehicle?: {
+                        /** @description Body style (e.g., "SUV", "Sedan") */
+                        bodyStyle?: string;
+                        /** @description Number of doors */
+                        doors?: string;
+                        /** @description Drive type (e.g., "AWD", "4x2") */
+                        driveType?: string;
+                        /** @description Engine type */
+                        engineType?: string;
+                        /** @description Primary fuel type */
+                        fuelType?: string;
+                        /** @description Gross Vehicle Weight Rating */
+                        gvwr?: string;
+                        /** @description Vehicle manufacturer (e.g., "Hyundai") */
+                        make: string;
+                        /** @description Vehicle manufacturer name */
+                        manufacturer?: string;
+                        /** @description Vehicle model (e.g., "Kona") */
+                        model: string;
+                        /** @description Vehicle series or sub-model */
+                        series?: string;
+                        /** @description Transmission type */
+                        transmission?: string;
+                        /** @description Trim level */
+                        trim?: string;
+                        /** @description Model year (e.g., 2023) */
+                        year: number;
+                    };
+                    /** @description Vehicle Identifier Section patterns */
+                    vis?: {
+                        patterns: {
+                            /** @description Attribute ID */
+                            attributeId: string | null;
+                            /** @description Element code */
+                            code: string;
+                            /** @description Confidence score (0-1) */
+                            confidence: number;
+                            /** @description Element name (e.g., "Model", "Body Class") */
+                            element: string;
+                            /** @description Additional metadata */
+                            metadata?: {
+                                /** @description Element weight for priority */
+                                elementWeight?: number;
+                                /** @description Group name */
+                                groupName?: string;
+                                /** @description Lookup table name */
+                                lookupTable?: string;
+                                /** @description Match details */
+                                matchDetails?: {
+                                    exactMatches?: number;
+                                    totalPositions?: number;
+                                    wildcardMatches?: number;
+                                };
+                                /**
+                                 * @description Pattern type
+                                 * @enum {string}
+                                 */
+                                patternType?: "VDS" | "VIS";
+                                /** @description Original pattern string */
+                                rawPattern?: string;
+                            };
+                            /** @description VIN positions covered by this pattern */
+                            positions: number[];
+                            /** @description Schema name */
+                            schema: string;
+                            /** @description Decoded value */
+                            value: string | null;
+                        }[];
+                        raw: string;
+                    };
+                    /** @description World Manufacturer Identifier information */
+                    wmi?: {
+                        /** @description 3-character WMI code from the VIN */
+                        code: string;
+                        /** @description Manufacturing country */
+                        country: string;
+                        /** @description Vehicle make/brand */
+                        make: string;
+                        /** @description Manufacturer name */
+                        manufacturer: string;
+                        /** @description Geographic region */
+                        region: string;
+                        /** @description Vehicle type */
+                        vehicleType: string;
+                    };
+                };
+                /** @description Any validation or decoding errors */
+                errors: ({
+                    actual?: string;
+                    category: string;
+                    /**
+                     * @description Specific error codes with structured grouping
+                     * @enum {string}
+                     */
+                    code: "100" | "101" | "200" | "201" | "202" | "300" | "301" | "302" | "400" | "401" | "402" | "500" | "501" | "502";
+                    details?: string;
+                    expected?: string;
+                    message: string;
+                    positions?: number[];
+                    /**
+                     * @description Error severity levels
+                     * @enum {string}
+                     */
+                    severity: "warning" | "error" | "fatal";
+                } | {
+                    category: string;
+                    /**
+                     * @description Specific error codes with structured grouping
+                     * @enum {string}
+                     */
+                    code: "100" | "101" | "200" | "201" | "202" | "300" | "301" | "302" | "400" | "401" | "402" | "500" | "501" | "502";
+                    details?: string;
+                    message: string;
+                    positions?: number[];
+                    /**
+                     * @description Error severity levels
+                     * @enum {string}
+                     */
+                    severity: "warning" | "error" | "fatal";
+                } | {
+                    category: string;
+                    /**
+                     * @description Specific error codes with structured grouping
+                     * @enum {string}
+                     */
+                    code: "100" | "101" | "200" | "201" | "202" | "300" | "301" | "302" | "400" | "401" | "402" | "500" | "501" | "502";
+                    details?: string;
+                    message: string;
+                    positions?: number[];
+                    searchKey: string;
+                    searchType: string;
+                    /**
+                     * @description Error severity levels
+                     * @enum {string}
+                     */
+                    severity: "warning" | "error" | "fatal";
+                } | {
+                    category: string;
+                    /**
+                     * @description Specific error codes with structured grouping
+                     * @enum {string}
+                     */
+                    code: "100" | "101" | "200" | "201" | "202" | "300" | "301" | "302" | "400" | "401" | "402" | "500" | "501" | "502";
+                    confidence?: number;
+                    details?: string;
+                    message: string;
+                    pattern?: string;
+                    positions?: number[];
+                    /**
+                     * @description Error severity levels
+                     * @enum {string}
+                     */
+                    severity: "warning" | "error" | "fatal";
+                } | {
+                    category: string;
+                    /**
+                     * @description Specific error codes with structured grouping
+                     * @enum {string}
+                     */
+                    code: "100" | "101" | "200" | "201" | "202" | "300" | "301" | "302" | "400" | "401" | "402" | "500" | "501" | "502";
+                    details?: string;
+                    message: string;
+                    params?: unknown[];
+                    positions?: number[];
+                    query?: string;
+                    /**
+                     * @description Error severity levels
+                     * @enum {string}
+                     */
+                    severity: "warning" | "error" | "fatal";
+                })[];
+                /** @description Diagnostic information */
+                metadata?: {
+                    /** @description Overall confidence score */
+                    confidence: number;
+                    /** @description Primary schema used for decoding */
+                    matchedSchema?: string;
+                    /** @description Total processing time in milliseconds */
+                    processingTime: number;
+                    /** @description SQL query information (if diagnostics enabled) */
+                    queries?: {
+                        params: unknown[];
+                        sql: string;
+                        timing: number;
+                    }[];
+                    /** @description Raw database records (if requested) */
+                    rawRecords?: unknown[];
+                    /** @description Library version */
+                    schemaVersion: string;
+                    /** @description Total number of patterns found */
+                    totalPatterns?: number;
+                };
+                /** @description Pattern matching details (if requested) */
+                patterns?: {
+                    /** @description Attribute ID */
+                    attributeId: string | null;
+                    /** @description Element code */
+                    code: string;
+                    /** @description Confidence score (0-1) */
+                    confidence: number;
+                    /** @description Element name (e.g., "Model", "Body Class") */
+                    element: string;
+                    /** @description Additional metadata */
+                    metadata?: {
+                        /** @description Element weight for priority */
+                        elementWeight?: number;
+                        /** @description Group name */
+                        groupName?: string;
+                        /** @description Lookup table name */
+                        lookupTable?: string;
+                        /** @description Match details */
+                        matchDetails?: {
+                            exactMatches?: number;
+                            totalPositions?: number;
+                            wildcardMatches?: number;
+                        };
+                        /**
+                         * @description Pattern type
+                         * @enum {string}
+                         */
+                        patternType?: "VDS" | "VIS";
+                        /** @description Original pattern string */
+                        rawPattern?: string;
+                    };
+                    /** @description VIN positions covered by this pattern */
+                    positions: number[];
+                    /** @description Schema name */
+                    schema: string;
+                    /** @description Decoded value */
+                    value: string | null;
+                }[];
+                /** @description Whether the VIN is valid */
+                valid: boolean;
+                /** @description Input VIN */
+                vin: string;
+            } | unknown;
             /**
              * @description The type of the content analysis test.
              * @example VIN
@@ -3121,592 +3406,7 @@ export interface components {
              * @example 200
              */
             response_code: number;
-            /** @description An inspection object will all related data */
-            result: {
-                /**
-                 * Format: address
-                 * @description The physical address where the inspection is expected to take place
-                 * @example 532 Mission Street, Santa Clara, CA, USA
-                 */
-                address?: string;
-                /**
-                 * @description The latitude of `address` if set, otherwise `null`.
-                 * @example 40.0612708
-                 */
-                address_lat?: string;
-                /**
-                 * @description The longitude of `address` if set, otherwise `null`.
-                 * @example 40.0612708
-                 */
-                address_lng?: string;
-                ai_inspection_ready_result?: components["schemas"]["AIInspectionReadyResult"] | unknown;
-                /**
-                 * @description The AI analysis result for this inspection.
-                 * @example pass
-                 */
-                ai_status?: components["schemas"]["VerificationResult"];
-                /** @description The details of the AI status for this inspection. This may include information about the criteria evaluation, any inconsistencies detected, and more. */
-                ai_status_details?: components["schemas"]["AIStatusDetails"];
-                /**
-                 * @description The reason for the AI analysis result for this inspection.
-                 * @example COMPLETE_WITH_NO_INCONSISTENCIES
-                 */
-                ai_status_reason?: components["schemas"]["AIStatusReason"];
-                ai_user_criteria_result?: components["schemas"]["AIUserCriteriaResult"] | unknown;
-                alert: components["schemas"]["InspectionAlertResult"];
-                app_opened: unknown;
-                assigned_to_member_user: components["schemas"]["User"];
-                /**
-                 * @description The id of the user this inspection is assigned to.
-                 * @example 19
-                 */
-                assigned_to_member_user_id: number;
-                /**
-                 * Format: date-time
-                 * @description The date/time the resource was created
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                created_at: string;
-                created_by_member_user: components["schemas"]["User"];
-                /**
-                 * @description The id of the member that created this inspection.
-                 * @example 43
-                 */
-                created_by_member_user_id: number;
-                /**
-                 * @description The values for the custom fields defined in the inspection type. The order of the values must match the order of the custom fields defined in the inspection type.  If the value is optional then you can provide null for that value.
-                 * @example [
-                 *       "abc123",
-                 *       "def123"
-                 *     ]
-                 */
-                custom_field_values: string[];
-                /**
-                 * Format: email
-                 * @description The email address of the customer completing the inspection. Required if `send_methods.email` is `true`.
-                 * @example kylorenxninja@gmail.com
-                 */
-                customer_email_address?: string;
-                /**
-                 * @description The first name of the customer completing the inspection.
-                 * @example Kylo
-                 */
-                customer_first_name?: string;
-                /**
-                 * Format: ipv4, ipv6
-                 * @description The IP address of the customer, recorded during the most recent photo capture inspection.
-                 * @example 123.532.124.174
-                 */
-                customer_ip_address?: string;
-                /**
-                 * @description The last name of the customer completing the inspection.
-                 * @example Ren
-                 */
-                customer_last_name?: string;
-                /**
-                 * @description The full name of the customer who will be completing the inspection. If specified, then `customer_first_name` and `customer_last_name` will not be provided.
-                 * @example Kylo Ren
-                 */
-                customer_name?: string;
-                /**
-                 * @description The country code for the customer's phone number.
-                 * @example US
-                 */
-                customer_phone_country?: string;
-                /**
-                 * Format: phone
-                 * @description The mobile number of the customer completing the inspection. Required if `send_methods.text` is `true`.
-                 * @example 3028675309
-                 */
-                customer_phone_number?: string;
-                /**
-                 * Format: date-time
-                 * @description The date/time the inspection was deleted. `null` if not deleted.
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                deleted_at?: string | null;
-                /**
-                 * @description The ID of the user who deleted the inspection. `null` if not deleted or auto-deleted by the system.
-                 * @example 19
-                 */
-                deleted_by_user_id?: number | null;
-                devices: components["schemas"]["InspectionDeviceInfo"][];
-                /**
-                 * Format: date-time
-                 * @description The datetime an email automated reply was sent
-                 * @example 2023-01-04 15:11:39.642
-                 */
-                email_auto_reply_sent?: string;
-                group?: components["schemas"]["Group"];
-                /**
-                 * @description The id of the group this inspection is for.
-                 * @example 23
-                 */
-                group_id?: number;
-                has_survey_available: boolean;
-                /**
-                 * @description The id of the inspection request
-                 * @example 1843
-                 */
-                id: number;
-                insights: {
-                    type: components["schemas"]["InspectionInsightType"];
-                }[];
-                /**
-                 * @description A smart link to load the inspection in the Vision app. This link is generated by the Vision backend and is unique to the inspection.
-                 * @example visionbytruepic.com/23AUkqg1xRb
-                 */
-                inspection_link?: string;
-                /**
-                 * @description Free-form inspection-ready criteria text. Max length 10KB.
-                 * @example Capture all rooms and appliances.
-                 */
-                inspection_ready_criteria_text?: string | null;
-                /**
-                 * @description The id of the inspection status this inspection is in.
-                 * @example 4
-                 */
-                inspection_status_id: components["schemas"]["InspectionStatusId"];
-                /** @description An inspection type with attached list and message template set data */
-                inspection_type: {
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was created
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    created_at: string;
-                    /**
-                     * @description the id of the user who created this inspection type. References `users.id`
-                     * @example 2343
-                     */
-                    created_by_member_user_id?: number;
-                    /** @description The custom fields associated with this Inspection Type with any custom field values */
-                    custom_fields: components["schemas"]["PopulatedCustomField"][];
-                    /**
-                     * @deprecated
-                     * @description The details about customer unique id 2. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     * @example {
-                     *       "entry_method": "ENTRY_METHOD_TEXT",
-                     *       "is_enabled": true,
-                     *       "is_required": false,
-                     *       "label": "Custom ID 2"
-                     *     }
-                     */
-                    customer_unique_id_2?: components["schemas"]["UniqueID2"];
-                    /**
-                     * @deprecated
-                     * @description The entry method for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     * @example Custom ID
-                     */
-                    customer_unique_id_label?: string;
-                    /**
-                     * @deprecated
-                     * @description The label for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     */
-                    entry_method?: components["schemas"]["CustomFieldEntryMethods"];
-                    /**
-                     * @description The id of the inspection type
-                     * @example 1843
-                     */
-                    id: number;
-                    /** @description The alert configuration that is used by this inspection type. */
-                    inspection_alert_config?: components["schemas"]["InspectionAlertConfig"];
-                    /**
-                     * @description The id of the inspection alert configuration that is used by this inspection type. References `inspection_alert_configs.id`
-                     * @example 539
-                     */
-                    inspection_alert_config_id?: number;
-                    /**
-                     * @description Optional inspection-ready criteria text for this inspection type.
-                     * @example Capture the VIN plate clearly and include a full odometer photo.
-                     */
-                    inspection_ready_criteria_text?: string | null;
-                    /**
-                     * @description Controls whether an address is required for the inspection or not
-                     * @example 1000
-                     */
-                    is_address_required: boolean;
-                    is_deleted: unknown;
-                    /**
-                     * @description When true, the list associated with this inspection type cannot be changed
-                     * @example false
-                     */
-                    is_list_locked: boolean;
-                    /** @description The IETF language tag for the intended language of the inspection. Non-customizable text in emails will use the language specified here. */
-                    language: components["schemas"]["LocalizationLanguages"];
-                    /** @description The list associated with this Inspection Type */
-                    list: {
-                        /**
-                         * Format: date-time
-                         * @description The date/time the resource was created
-                         * @example 2020-05-01T21:44:40.000Z
-                         */
-                        created_at: string;
-                        /**
-                         * @description The id of the user that created this list
-                         * @example 609
-                         */
-                        created_by_member_user_id?: number;
-                        /**
-                         * @description The groups of items in the list
-                         * @example {
-                         *       "grp1": {
-                         *         "name": "Group 2"
-                         *       }
-                         *     }
-                         */
-                        groups?: components["schemas"]["ListItemGroups"];
-                        /**
-                         * @description The id of the resource.
-                         * @example 1843
-                         */
-                        id: number;
-                        /**
-                         * @description The id of the inspection that this list belongs to
-                         * @example 6342
-                         */
-                        inspection_id?: number;
-                        inspection_types: components["schemas"]["InspectionType"][];
-                        is_deleted: unknown;
-                        items: components["schemas"]["ListItem"][];
-                        /**
-                         * @description The auto-generated name of the list.
-                         * @example List for Inspection 3527
-                         */
-                        name: string;
-                        /**
-                         * @description The id of the organization that this list belongs to
-                         * @example 52
-                         */
-                        organization_id: number;
-                        /**
-                         * @description The id of the team that this list belongs to
-                         * @example 66
-                         */
-                        team_id?: number;
-                        /**
-                         * @description The type of the list. Must be `EVENT_TEMPLATE`, `EVENT_INSTANCE`, `SURVEY_TEMPLATE`, or `SURVEY_INSTANCE`
-                         * @example EVENT_TEMPLATE
-                         */
-                        type: components["schemas"]["ListType"];
-                        /**
-                         * Format: date-time
-                         * @description The date/time the resource was last updated
-                         * @example 2020-05-01T21:44:40.000Z
-                         */
-                        updated_at: string;
-                    };
-                    /**
-                     * @description The id of the list that is used by this inspection type. References `lists.id`
-                     * @example 3345
-                     */
-                    list_id?: number;
-                    /**
-                     * @description the maximum distance away from the configured inspection address that an inspection can be completed in meters.
-                     * @example 1000
-                     */
-                    max_distance_from_address_threshold?: number;
-                    /** @description The message template set associated with this Inspection Type */
-                    message_template_set: components["schemas"]["MessageTemplateSet"];
-                    /**
-                     * @description The id of the message template set that is used by this inspection type. References `message_template_sets.id`
-                     * @example 539
-                     */
-                    message_template_set_id: number;
-                    /**
-                     * @description the id of the user who last modified this inspection type. References `users.id`
-                     * @example 2343
-                     */
-                    modified_by_member_user_id?: number;
-                    /**
-                     * @description The name of the inspection type
-                     * @example My Type
-                     */
-                    name: string;
-                    /**
-                     * @description the id of the organization that this inspection type belongs to. References `organizations.id`.
-                     * @example 14
-                     */
-                    organization_id: number;
-                    /** @description The outcome set that is used by this inspection type. */
-                    outcome_set?: components["schemas"]["OutcomeSet"];
-                    /**
-                     * @description The id of the outcome set that is used by this inspection type. References `outcome_sets.id`
-                     * @example 539
-                     */
-                    outcome_set_id?: number;
-                    /**
-                     * @deprecated
-                     * @description the id of the team that this inspection type belongs to. References `teams.id`. Note that this is no longer used, and inspection types can now be associated with multiple teams
-                     * @example 124
-                     */
-                    team_id: number;
-                    /** @description The the teams that use this inspection type. */
-                    teams?: {
-                        /**
-                         * @description The id of the resource
-                         * @example 1843
-                         */
-                        id: number;
-                        /**
-                         * @description The name of the team.
-                         * @example Claims
-                         */
-                        name?: string;
-                    }[];
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was last updated
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    updated_at: string;
-                    /**
-                     * @description When true, there is only one name for the user to fill out rather than a separate first name and last name field
-                     * @example true
-                     */
-                    use_single_name_field: boolean;
-                };
-                /**
-                 * @description The id of the inspection type this inspection is for.
-                 * @example 12
-                 */
-                inspection_type_id: number;
-                is_deleted: unknown;
-                is_expired: unknown;
-                list: {
-                    /**
-                     * @description The groups of items in the list
-                     * @example {
-                     *       "grp1": {
-                     *         "name": "Group 2"
-                     *       }
-                     *     }
-                     */
-                    groups?: components["schemas"]["ListItemGroups"];
-                    /**
-                     * @description The id of the resource.
-                     * @example 1843
-                     */
-                    id: number;
-                    items: components["schemas"]["InspectionListItemWithPhotos"][];
-                    /**
-                     * @description The auto-generated name of the list.
-                     * @example List for Inspection 3527
-                     */
-                    name: string;
-                };
-                locations: components["schemas"]["PopulatedLocation"][];
-                /**
-                 * @description The maximum distance, in meters, from the address that the photos/videos must be taken in order to be valid
-                 * @example 1000
-                 */
-                max_distance_from_address_threshold?: number;
-                /**
-                 * @description The message supplement (custom note) to be attached to the request text/email. Maximum length of 255 characters.
-                 * @example Please complete in a timely manner
-                 */
-                message_supplement?: string;
-                organization: components["schemas"]["Organization"];
-                organization_enabled_features: components["schemas"]["OrganizationEnabledFeature"][];
-                /**
-                 * @description The id of the organization this inspection is for.
-                 * @example 117
-                 */
-                organization_id: number;
-                organization_team: components["schemas"]["Team"];
-                outcome?: components["schemas"]["Outcome"];
-                /**
-                 * @description The id of the outcome of this inspection.
-                 * @example 29
-                 */
-                outcome_id?: number;
-                /**
-                 * @description The reason for the outcome of this inspection
-                 * @example Customer cancelled their service with our company
-                 */
-                outcome_reason?: string;
-                photo_counts: unknown;
-                /**
-                 * Format: date-time
-                 * @description The date/time when the last photo/video was uploaded. ISO 8601 format.
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                photo_uploaded_at?: string;
-                photos: components["schemas"]["InspectionTruepic"][];
-                /** @description The platform of our app that the inspection will be / has been performed on. */
-                platform?: components["schemas"]["InspectionPlatform"];
-                /**
-                 * Format: date-time
-                 * @description The date/time (in UTC) the inspection is scheduled to be sent to the customer
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                scheduled_for?: string;
-                /**
-                 * @description The IANA timezone name for the inspection's scheduled datetime. Used only for display purposes, as `scheduled_for` is in UTC.
-                 * @example America/New_York
-                 */
-                scheduled_tz?: string;
-                /** @description The method(s) to send the inspection request to the customer completing the inspection. */
-                send_methods: {
-                    /**
-                     * @description When true, will send text messages to the customer_email_address
-                     * @example false
-                     */
-                    email: boolean;
-                    /**
-                     * @description When true, will send text messages to the customer_phone_number
-                     * @example true
-                     */
-                    text: boolean;
-                };
-                /**
-                 * @description Times to send automated finish reminders
-                 * @example [
-                 *       "10m",
-                 *       "20m",
-                 *       "30m"
-                 *     ]
-                 */
-                sent_auto_finish_reminders?: string[];
-                /**
-                 * @description Times to send automated reminders
-                 * @example [
-                 *       "10m",
-                 *       "20m",
-                 *       "30m"
-                 *     ]
-                 */
-                sent_auto_reminders?: string[];
-                /**
-                 * Format: date-time
-                 * @description The datetime an sms automated reply was sent
-                 * @example 2023-01-04 15:11:39.642
-                 */
-                sms_auto_reply_sent?: string;
-                status: components["schemas"]["InspectionStatus"];
-                /**
-                 * @description The id of the team this inspection is for.
-                 * @example 182
-                 */
-                team_id: number;
-                timeline: {
-                    action_type: components["schemas"]["TimelineActionType"];
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was created
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    created_at: string;
-                    /**
-                     * @description The id of the app user that performed this action
-                     * @example 4335
-                     */
-                    customer_user_id?: number;
-                    /** @description An object containing any additional data related to the action. */
-                    data?: {
-                        /** @description The flags and comment applied for the ACTION_DEVICE_FLAGS_CHANGED activity */
-                        flags?: {
-                            /** @description The comment to apply to the activity log for this flag action. */
-                            comment?: string;
-                            /** @description The complete list of flags to apply to the device for this inspection. This will update the list of flags to match this array by adding and/or removing any existing flags. */
-                            flags: components["schemas"]["DeviceFlagType"][];
-                        };
-                        /**
-                         * @description Whether the full message was sent
-                         * @example true
-                         */
-                        is_details_full_message?: boolean;
-                        /**
-                         * @description The id of the associated list item
-                         * @example 12345
-                         */
-                        list_item_id?: number;
-                        /** @description An optional location associated with the action */
-                        location?: components["schemas"]["LensActivityLocationData"];
-                        /**
-                         * @description The Sendgrid email message id of the associated message
-                         * @example DGnO3FNol23452ewf9v-7786453638cc-xx435l-1-646B123C-53.0
-                         */
-                        message_id?: string;
-                        /**
-                         * @description If the action was triggered by a Lens activity, this will contain details about the activity
-                         * @example timestamp_old
-                         */
-                        reason?: string;
-                        /** @description An array of tag strings describing an activity */
-                        tags?: string[];
-                        /**
-                         * @description The id of the associated Truepic
-                         * @example 12345
-                         */
-                        truepic_id?: number;
-                    };
-                    /** @description Any additional information, such as a member's custom message or more descriptive text. */
-                    details?: number | null;
-                    /** @description The id of the device fingerprint record */
-                    device_fingerprint_details_request_id?: string;
-                    /**
-                     * @description The id of the device record
-                     * @example 1843
-                     */
-                    device_id?: number;
-                    /**
-                     * @description The determined status of the fingerprint data.
-                     * @example VALID
-                     */
-                    device_validation_status?: components["schemas"]["DeviceValidationStatus"];
-                    /**
-                     * @description The id of the resource.
-                     * @example 1843
-                     */
-                    id: number;
-                    /**
-                     * @description The id of the inspection this action occurred on
-                     * @example 4335
-                     */
-                    inspection_id: number;
-                    is_deleted?: unknown;
-                    location: components["schemas"]["PopulatedLocation"];
-                    /**
-                     * @description The id of the location record
-                     * @example 12345
-                     */
-                    location_id?: number;
-                    /**
-                     * @description The id of the dashboard user that performed this action
-                     * @example 4335
-                     */
-                    member_user_id?: number;
-                    /** @description Any meta information, such as the URL when a new smart link is generated. */
-                    meta?: string;
-                    /**
-                     * @description The id of the action type
-                     * @example 12
-                     */
-                    timeline_action_type_id?: number;
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was last updated
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    updated_at: string;
-                }[];
-                /**
-                 * Format: date-time
-                 * @description The date/time the resource was last updated
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                updated_at: string;
-                /**
-                 * @description The aggregate verification result of all photos/videos
-                 * @example pass
-                 */
-                verification_result?: components["schemas"]["VerificationResult"];
-                organization_token_status: {
-                    expires?: number | null;
-                    is_valid: boolean;
-                };
-            };
+            result: components["schemas"]["SerializedInspection"];
         };
         /** @description Request Body for POST /inspections */
         CreateInspectionTypeBody: {
@@ -4062,12 +3762,6 @@ export interface components {
              */
             team_id: number;
         };
-        CriteriaEvaluationOutput: {
-            discrepancies: components["schemas"]["DiscrepanciesOutputParams"][];
-            itemDetails: components["schemas"]["SubmitItemDetailsToolCallParams"][];
-            overview: components["schemas"]["SubmitOverviewToolCallParams"] | unknown;
-            qaDetails: components["schemas"]["SubmitQADetailsToolCallParams"][];
-        };
         CriteriaGenerationOutput: {
             criteria: {
                 criterion: string;
@@ -4127,114 +3821,10 @@ export interface components {
              */
             value: string;
         };
-        /** @description A set of possible options that a user can select from when creating an inspection */
-        CustomFieldOptionSet: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the user that created this option custom field option set.
-             * @example 894
-             */
-            created_by_user_id: number;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            is_deleted: unknown;
-            /**
-             * @description The id of the user that last edited this custom field option set.
-             * @example 542
-             */
-            modified_by_user_id?: number;
-            /**
-             * @description The name of the custom field option set
-             * @example Option Set Name
-             */
-            name: string;
-            /**
-             * @description The available options in this option set
-             * @example [
-             *       {
-             *         "name": "Option Label",
-             *         "value": "OPTION_ID"
-             *       }
-             *     ]
-             */
-            options: {
-                /** @description The name of the option */
-                name: string;
-                /**
-                 * @description The value of the option
-                 * @example OPTION_ID
-                 */
-                value: string;
-            }[];
-            /**
-             * @description The id of the organization that owns this custom field option set.
-             * @example 532
-             */
-            organization_id: number;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         DeleteLandingPageResult: components["schemas"]["ResponseData"];
         DeleteWebsiteFormResult: components["schemas"]["ResponseData"];
         /** @enum {string} */
         DetailsReadinessStatus: "READY" | "UNUSABLE" | "WRONG_CONTEXT";
-        /** @description A device record that contains information about the device used to take a photo or perform another action in an inspection. */
-        Device: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The device model, as returned by the device fingerprinting service.
-             * @example iPhone 12
-             */
-            device: string;
-            /**
-             * @description The Fingerprint ID of the device, as returned by the device fingerprinting service.
-             * @example Y7k0XNpijpaOjbQ0Yyzq
-             */
-            fingerprint_id: string;
-            /**
-             * @description The id of the device record.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description The date and time when the device was last seen by the system.
-             * @example 2023-10-01T12:00:00Z
-             */
-            last_seen_at: string;
-            /**
-             * @description The operating system of the device, as returned by the device fingerprinting service.
-             * @example iOS
-             */
-            os: string;
-            /**
-             * @description The version of the operating system of the device, as returned by the device fingerprinting service.
-             * @example 14.4
-             */
-            os_version: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         /** @enum {string} */
         DeviceFlagType: "rooted_device" | "spoofed_location" | "falsified_time" | "incorrect_location" | "picture_of_photo" | "bad_photo" | "deleted_photos" | "bad_answer" | "other";
         /** @enum {string} */
@@ -4700,592 +4290,7 @@ export interface components {
              * @example 200
              */
             response_code: number;
-            /** @description An inspection object will all related data */
-            result: {
-                /**
-                 * Format: address
-                 * @description The physical address where the inspection is expected to take place
-                 * @example 532 Mission Street, Santa Clara, CA, USA
-                 */
-                address?: string;
-                /**
-                 * @description The latitude of `address` if set, otherwise `null`.
-                 * @example 40.0612708
-                 */
-                address_lat?: string;
-                /**
-                 * @description The longitude of `address` if set, otherwise `null`.
-                 * @example 40.0612708
-                 */
-                address_lng?: string;
-                ai_inspection_ready_result?: components["schemas"]["AIInspectionReadyResult"] | unknown;
-                /**
-                 * @description The AI analysis result for this inspection.
-                 * @example pass
-                 */
-                ai_status?: components["schemas"]["VerificationResult"];
-                /** @description The details of the AI status for this inspection. This may include information about the criteria evaluation, any inconsistencies detected, and more. */
-                ai_status_details?: components["schemas"]["AIStatusDetails"];
-                /**
-                 * @description The reason for the AI analysis result for this inspection.
-                 * @example COMPLETE_WITH_NO_INCONSISTENCIES
-                 */
-                ai_status_reason?: components["schemas"]["AIStatusReason"];
-                ai_user_criteria_result?: components["schemas"]["AIUserCriteriaResult"] | unknown;
-                alert: components["schemas"]["InspectionAlertResult"];
-                app_opened: unknown;
-                assigned_to_member_user: components["schemas"]["User"];
-                /**
-                 * @description The id of the user this inspection is assigned to.
-                 * @example 19
-                 */
-                assigned_to_member_user_id: number;
-                /**
-                 * Format: date-time
-                 * @description The date/time the resource was created
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                created_at: string;
-                created_by_member_user: components["schemas"]["User"];
-                /**
-                 * @description The id of the member that created this inspection.
-                 * @example 43
-                 */
-                created_by_member_user_id: number;
-                /**
-                 * @description The values for the custom fields defined in the inspection type. The order of the values must match the order of the custom fields defined in the inspection type.  If the value is optional then you can provide null for that value.
-                 * @example [
-                 *       "abc123",
-                 *       "def123"
-                 *     ]
-                 */
-                custom_field_values: string[];
-                /**
-                 * Format: email
-                 * @description The email address of the customer completing the inspection. Required if `send_methods.email` is `true`.
-                 * @example kylorenxninja@gmail.com
-                 */
-                customer_email_address?: string;
-                /**
-                 * @description The first name of the customer completing the inspection.
-                 * @example Kylo
-                 */
-                customer_first_name?: string;
-                /**
-                 * Format: ipv4, ipv6
-                 * @description The IP address of the customer, recorded during the most recent photo capture inspection.
-                 * @example 123.532.124.174
-                 */
-                customer_ip_address?: string;
-                /**
-                 * @description The last name of the customer completing the inspection.
-                 * @example Ren
-                 */
-                customer_last_name?: string;
-                /**
-                 * @description The full name of the customer who will be completing the inspection. If specified, then `customer_first_name` and `customer_last_name` will not be provided.
-                 * @example Kylo Ren
-                 */
-                customer_name?: string;
-                /**
-                 * @description The country code for the customer's phone number.
-                 * @example US
-                 */
-                customer_phone_country?: string;
-                /**
-                 * Format: phone
-                 * @description The mobile number of the customer completing the inspection. Required if `send_methods.text` is `true`.
-                 * @example 3028675309
-                 */
-                customer_phone_number?: string;
-                /**
-                 * Format: date-time
-                 * @description The date/time the inspection was deleted. `null` if not deleted.
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                deleted_at?: string | null;
-                /**
-                 * @description The ID of the user who deleted the inspection. `null` if not deleted or auto-deleted by the system.
-                 * @example 19
-                 */
-                deleted_by_user_id?: number | null;
-                devices: components["schemas"]["InspectionDeviceInfo"][];
-                /**
-                 * Format: date-time
-                 * @description The datetime an email automated reply was sent
-                 * @example 2023-01-04 15:11:39.642
-                 */
-                email_auto_reply_sent?: string;
-                group?: components["schemas"]["Group"];
-                /**
-                 * @description The id of the group this inspection is for.
-                 * @example 23
-                 */
-                group_id?: number;
-                has_survey_available: boolean;
-                /**
-                 * @description The id of the inspection request
-                 * @example 1843
-                 */
-                id: number;
-                insights: {
-                    type: components["schemas"]["InspectionInsightType"];
-                }[];
-                /**
-                 * @description A smart link to load the inspection in the Vision app. This link is generated by the Vision backend and is unique to the inspection.
-                 * @example visionbytruepic.com/23AUkqg1xRb
-                 */
-                inspection_link?: string;
-                /**
-                 * @description Free-form inspection-ready criteria text. Max length 10KB.
-                 * @example Capture all rooms and appliances.
-                 */
-                inspection_ready_criteria_text?: string | null;
-                /**
-                 * @description The id of the inspection status this inspection is in.
-                 * @example 4
-                 */
-                inspection_status_id: components["schemas"]["InspectionStatusId"];
-                /** @description An inspection type with attached list and message template set data */
-                inspection_type: {
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was created
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    created_at: string;
-                    /**
-                     * @description the id of the user who created this inspection type. References `users.id`
-                     * @example 2343
-                     */
-                    created_by_member_user_id?: number;
-                    /** @description The custom fields associated with this Inspection Type with any custom field values */
-                    custom_fields: components["schemas"]["PopulatedCustomField"][];
-                    /**
-                     * @deprecated
-                     * @description The details about customer unique id 2. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     * @example {
-                     *       "entry_method": "ENTRY_METHOD_TEXT",
-                     *       "is_enabled": true,
-                     *       "is_required": false,
-                     *       "label": "Custom ID 2"
-                     *     }
-                     */
-                    customer_unique_id_2?: components["schemas"]["UniqueID2"];
-                    /**
-                     * @deprecated
-                     * @description The entry method for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     * @example Custom ID
-                     */
-                    customer_unique_id_label?: string;
-                    /**
-                     * @deprecated
-                     * @description The label for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
-                     */
-                    entry_method?: components["schemas"]["CustomFieldEntryMethods"];
-                    /**
-                     * @description The id of the inspection type
-                     * @example 1843
-                     */
-                    id: number;
-                    /** @description The alert configuration that is used by this inspection type. */
-                    inspection_alert_config?: components["schemas"]["InspectionAlertConfig"];
-                    /**
-                     * @description The id of the inspection alert configuration that is used by this inspection type. References `inspection_alert_configs.id`
-                     * @example 539
-                     */
-                    inspection_alert_config_id?: number;
-                    /**
-                     * @description Optional inspection-ready criteria text for this inspection type.
-                     * @example Capture the VIN plate clearly and include a full odometer photo.
-                     */
-                    inspection_ready_criteria_text?: string | null;
-                    /**
-                     * @description Controls whether an address is required for the inspection or not
-                     * @example 1000
-                     */
-                    is_address_required: boolean;
-                    is_deleted: unknown;
-                    /**
-                     * @description When true, the list associated with this inspection type cannot be changed
-                     * @example false
-                     */
-                    is_list_locked: boolean;
-                    /** @description The IETF language tag for the intended language of the inspection. Non-customizable text in emails will use the language specified here. */
-                    language: components["schemas"]["LocalizationLanguages"];
-                    /** @description The list associated with this Inspection Type */
-                    list: {
-                        /**
-                         * Format: date-time
-                         * @description The date/time the resource was created
-                         * @example 2020-05-01T21:44:40.000Z
-                         */
-                        created_at: string;
-                        /**
-                         * @description The id of the user that created this list
-                         * @example 609
-                         */
-                        created_by_member_user_id?: number;
-                        /**
-                         * @description The groups of items in the list
-                         * @example {
-                         *       "grp1": {
-                         *         "name": "Group 2"
-                         *       }
-                         *     }
-                         */
-                        groups?: components["schemas"]["ListItemGroups"];
-                        /**
-                         * @description The id of the resource.
-                         * @example 1843
-                         */
-                        id: number;
-                        /**
-                         * @description The id of the inspection that this list belongs to
-                         * @example 6342
-                         */
-                        inspection_id?: number;
-                        inspection_types: components["schemas"]["InspectionType"][];
-                        is_deleted: unknown;
-                        items: components["schemas"]["ListItem"][];
-                        /**
-                         * @description The auto-generated name of the list.
-                         * @example List for Inspection 3527
-                         */
-                        name: string;
-                        /**
-                         * @description The id of the organization that this list belongs to
-                         * @example 52
-                         */
-                        organization_id: number;
-                        /**
-                         * @description The id of the team that this list belongs to
-                         * @example 66
-                         */
-                        team_id?: number;
-                        /**
-                         * @description The type of the list. Must be `EVENT_TEMPLATE`, `EVENT_INSTANCE`, `SURVEY_TEMPLATE`, or `SURVEY_INSTANCE`
-                         * @example EVENT_TEMPLATE
-                         */
-                        type: components["schemas"]["ListType"];
-                        /**
-                         * Format: date-time
-                         * @description The date/time the resource was last updated
-                         * @example 2020-05-01T21:44:40.000Z
-                         */
-                        updated_at: string;
-                    };
-                    /**
-                     * @description The id of the list that is used by this inspection type. References `lists.id`
-                     * @example 3345
-                     */
-                    list_id?: number;
-                    /**
-                     * @description the maximum distance away from the configured inspection address that an inspection can be completed in meters.
-                     * @example 1000
-                     */
-                    max_distance_from_address_threshold?: number;
-                    /** @description The message template set associated with this Inspection Type */
-                    message_template_set: components["schemas"]["MessageTemplateSet"];
-                    /**
-                     * @description The id of the message template set that is used by this inspection type. References `message_template_sets.id`
-                     * @example 539
-                     */
-                    message_template_set_id: number;
-                    /**
-                     * @description the id of the user who last modified this inspection type. References `users.id`
-                     * @example 2343
-                     */
-                    modified_by_member_user_id?: number;
-                    /**
-                     * @description The name of the inspection type
-                     * @example My Type
-                     */
-                    name: string;
-                    /**
-                     * @description the id of the organization that this inspection type belongs to. References `organizations.id`.
-                     * @example 14
-                     */
-                    organization_id: number;
-                    /** @description The outcome set that is used by this inspection type. */
-                    outcome_set?: components["schemas"]["OutcomeSet"];
-                    /**
-                     * @description The id of the outcome set that is used by this inspection type. References `outcome_sets.id`
-                     * @example 539
-                     */
-                    outcome_set_id?: number;
-                    /**
-                     * @deprecated
-                     * @description the id of the team that this inspection type belongs to. References `teams.id`. Note that this is no longer used, and inspection types can now be associated with multiple teams
-                     * @example 124
-                     */
-                    team_id: number;
-                    /** @description The the teams that use this inspection type. */
-                    teams?: {
-                        /**
-                         * @description The id of the resource
-                         * @example 1843
-                         */
-                        id: number;
-                        /**
-                         * @description The name of the team.
-                         * @example Claims
-                         */
-                        name?: string;
-                    }[];
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was last updated
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    updated_at: string;
-                    /**
-                     * @description When true, there is only one name for the user to fill out rather than a separate first name and last name field
-                     * @example true
-                     */
-                    use_single_name_field: boolean;
-                };
-                /**
-                 * @description The id of the inspection type this inspection is for.
-                 * @example 12
-                 */
-                inspection_type_id: number;
-                is_deleted: unknown;
-                is_expired: unknown;
-                list: {
-                    /**
-                     * @description The groups of items in the list
-                     * @example {
-                     *       "grp1": {
-                     *         "name": "Group 2"
-                     *       }
-                     *     }
-                     */
-                    groups?: components["schemas"]["ListItemGroups"];
-                    /**
-                     * @description The id of the resource.
-                     * @example 1843
-                     */
-                    id: number;
-                    items: components["schemas"]["InspectionListItemWithPhotos"][];
-                    /**
-                     * @description The auto-generated name of the list.
-                     * @example List for Inspection 3527
-                     */
-                    name: string;
-                };
-                locations: components["schemas"]["PopulatedLocation"][];
-                /**
-                 * @description The maximum distance, in meters, from the address that the photos/videos must be taken in order to be valid
-                 * @example 1000
-                 */
-                max_distance_from_address_threshold?: number;
-                /**
-                 * @description The message supplement (custom note) to be attached to the request text/email. Maximum length of 255 characters.
-                 * @example Please complete in a timely manner
-                 */
-                message_supplement?: string;
-                organization: components["schemas"]["Organization"];
-                organization_enabled_features: components["schemas"]["OrganizationEnabledFeature"][];
-                /**
-                 * @description The id of the organization this inspection is for.
-                 * @example 117
-                 */
-                organization_id: number;
-                organization_team: components["schemas"]["Team"];
-                outcome?: components["schemas"]["Outcome"];
-                /**
-                 * @description The id of the outcome of this inspection.
-                 * @example 29
-                 */
-                outcome_id?: number;
-                /**
-                 * @description The reason for the outcome of this inspection
-                 * @example Customer cancelled their service with our company
-                 */
-                outcome_reason?: string;
-                photo_counts: unknown;
-                /**
-                 * Format: date-time
-                 * @description The date/time when the last photo/video was uploaded. ISO 8601 format.
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                photo_uploaded_at?: string;
-                photos: components["schemas"]["InspectionTruepic"][];
-                /** @description The platform of our app that the inspection will be / has been performed on. */
-                platform?: components["schemas"]["InspectionPlatform"];
-                /**
-                 * Format: date-time
-                 * @description The date/time (in UTC) the inspection is scheduled to be sent to the customer
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                scheduled_for?: string;
-                /**
-                 * @description The IANA timezone name for the inspection's scheduled datetime. Used only for display purposes, as `scheduled_for` is in UTC.
-                 * @example America/New_York
-                 */
-                scheduled_tz?: string;
-                /** @description The method(s) to send the inspection request to the customer completing the inspection. */
-                send_methods: {
-                    /**
-                     * @description When true, will send text messages to the customer_email_address
-                     * @example false
-                     */
-                    email: boolean;
-                    /**
-                     * @description When true, will send text messages to the customer_phone_number
-                     * @example true
-                     */
-                    text: boolean;
-                };
-                /**
-                 * @description Times to send automated finish reminders
-                 * @example [
-                 *       "10m",
-                 *       "20m",
-                 *       "30m"
-                 *     ]
-                 */
-                sent_auto_finish_reminders?: string[];
-                /**
-                 * @description Times to send automated reminders
-                 * @example [
-                 *       "10m",
-                 *       "20m",
-                 *       "30m"
-                 *     ]
-                 */
-                sent_auto_reminders?: string[];
-                /**
-                 * Format: date-time
-                 * @description The datetime an sms automated reply was sent
-                 * @example 2023-01-04 15:11:39.642
-                 */
-                sms_auto_reply_sent?: string;
-                status: components["schemas"]["InspectionStatus"];
-                /**
-                 * @description The id of the team this inspection is for.
-                 * @example 182
-                 */
-                team_id: number;
-                timeline: {
-                    action_type: components["schemas"]["TimelineActionType"];
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was created
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    created_at: string;
-                    /**
-                     * @description The id of the app user that performed this action
-                     * @example 4335
-                     */
-                    customer_user_id?: number;
-                    /** @description An object containing any additional data related to the action. */
-                    data?: {
-                        /** @description The flags and comment applied for the ACTION_DEVICE_FLAGS_CHANGED activity */
-                        flags?: {
-                            /** @description The comment to apply to the activity log for this flag action. */
-                            comment?: string;
-                            /** @description The complete list of flags to apply to the device for this inspection. This will update the list of flags to match this array by adding and/or removing any existing flags. */
-                            flags: components["schemas"]["DeviceFlagType"][];
-                        };
-                        /**
-                         * @description Whether the full message was sent
-                         * @example true
-                         */
-                        is_details_full_message?: boolean;
-                        /**
-                         * @description The id of the associated list item
-                         * @example 12345
-                         */
-                        list_item_id?: number;
-                        /** @description An optional location associated with the action */
-                        location?: components["schemas"]["LensActivityLocationData"];
-                        /**
-                         * @description The Sendgrid email message id of the associated message
-                         * @example DGnO3FNol23452ewf9v-7786453638cc-xx435l-1-646B123C-53.0
-                         */
-                        message_id?: string;
-                        /**
-                         * @description If the action was triggered by a Lens activity, this will contain details about the activity
-                         * @example timestamp_old
-                         */
-                        reason?: string;
-                        /** @description An array of tag strings describing an activity */
-                        tags?: string[];
-                        /**
-                         * @description The id of the associated Truepic
-                         * @example 12345
-                         */
-                        truepic_id?: number;
-                    };
-                    /** @description Any additional information, such as a member's custom message or more descriptive text. */
-                    details?: number | null;
-                    /** @description The id of the device fingerprint record */
-                    device_fingerprint_details_request_id?: string;
-                    /**
-                     * @description The id of the device record
-                     * @example 1843
-                     */
-                    device_id?: number;
-                    /**
-                     * @description The determined status of the fingerprint data.
-                     * @example VALID
-                     */
-                    device_validation_status?: components["schemas"]["DeviceValidationStatus"];
-                    /**
-                     * @description The id of the resource.
-                     * @example 1843
-                     */
-                    id: number;
-                    /**
-                     * @description The id of the inspection this action occurred on
-                     * @example 4335
-                     */
-                    inspection_id: number;
-                    is_deleted?: unknown;
-                    location: components["schemas"]["PopulatedLocation"];
-                    /**
-                     * @description The id of the location record
-                     * @example 12345
-                     */
-                    location_id?: number;
-                    /**
-                     * @description The id of the dashboard user that performed this action
-                     * @example 4335
-                     */
-                    member_user_id?: number;
-                    /** @description Any meta information, such as the URL when a new smart link is generated. */
-                    meta?: string;
-                    /**
-                     * @description The id of the action type
-                     * @example 12
-                     */
-                    timeline_action_type_id?: number;
-                    /**
-                     * Format: date-time
-                     * @description The date/time the resource was last updated
-                     * @example 2020-05-01T21:44:40.000Z
-                     */
-                    updated_at: string;
-                }[];
-                /**
-                 * Format: date-time
-                 * @description The date/time the resource was last updated
-                 * @example 2020-05-01T21:44:40.000Z
-                 */
-                updated_at: string;
-                /**
-                 * @description The aggregate verification result of all photos/videos
-                 * @example pass
-                 */
-                verification_result?: components["schemas"]["VerificationResult"];
-                organization_token_status: {
-                    expires?: number | null;
-                    is_valid: boolean;
-                };
-            };
+            result: components["schemas"]["SerializedInspection"];
         };
         /** @description The response body for GET /lists/{listId} */
         GetInspectionTypeResult: {
@@ -6519,11 +5524,6 @@ export interface components {
                  * @example claims
                  */
                 slug?: string;
-                /**
-                 * @description The callback URL we send a request to on action / change in status of an inspection request
-                 * @example https://api.qualitycapital.com/hooks/truepic
-                 */
-                status_callback_url?: string;
                 /**
                  * @description The url slug used to acquire the team's assets
                  * @example coca-cola
@@ -8177,66 +7177,6 @@ export interface components {
              */
             timestamp: string;
         };
-        /** @description A list of photos/videos and questions to prompt the customer for during an inspection. */
-        List: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the user that created this list
-             * @example 609
-             */
-            created_by_member_user_id?: number;
-            /**
-             * @description The groups of items in the list
-             * @example {
-             *       "grp1": {
-             *         "name": "Group 2"
-             *       }
-             *     }
-             */
-            groups?: components["schemas"]["ListItemGroups"];
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description The id of the inspection that this list belongs to
-             * @example 6342
-             */
-            inspection_id?: number;
-            is_deleted: unknown;
-            /**
-             * @description The auto-generated name of the list.
-             * @example List for Inspection 3527
-             */
-            name: string;
-            /**
-             * @description The id of the organization that this list belongs to
-             * @example 52
-             */
-            organization_id: number;
-            /**
-             * @description The id of the team that this list belongs to
-             * @example 66
-             */
-            team_id?: number;
-            /**
-             * @description The type of the list. Must be `EVENT_TEMPLATE`, `EVENT_INSTANCE`, `SURVEY_TEMPLATE`, or `SURVEY_INSTANCE`
-             * @example EVENT_TEMPLATE
-             */
-            type: components["schemas"]["ListType"];
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         /** @description A photo/video or question to prompt the customer for during an inspection. */
         ListItem: {
             /**
@@ -8501,36 +7441,6 @@ export interface components {
         };
         /** @description Union type for all question types */
         ListItemQuestion: components["schemas"]["ListItemMultipleChoiceQuestion"] | components["schemas"]["ListItemTextQuestion"] | components["schemas"]["ListItemDateQuestion"];
-        /** @description Base interface for a question on a list item */
-        ListItemQuestionBase: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description The id of the list item this question is for
-             * @example 643
-             */
-            list_item_id: number;
-            /**
-             * @description The type of question this list item is. Must be `MULTIPLE_CHOICE`, `TEXT`, or `DATE`.
-             * @example TEXT
-             */
-            type: components["schemas"]["ListItemQuestionType"];
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         ListItemQuestionChoice: {
             /**
              * @description Whether to allow custom text input for this possible answer option.
@@ -8543,8 +7453,6 @@ export interface components {
              */
             name: string;
         };
-        /** @enum {string} */
-        ListItemQuestionType: "TEXT" | "MULTIPLE_CHOICE" | "DATE";
         /** @description Text question */
         ListItemTextQuestion: {
             /** @description The user's text answer, or null if unanswered */
@@ -8582,91 +7490,6 @@ export interface components {
         ListType: "EVENT_TEMPLATE" | "EVENT_INSTANCE" | "SURVEY_TEMPLATE" | "SURVEY_INSTANCE";
         /** @enum {string} */
         LocalizationLanguages: "en" | "es" | "fr-ca";
-        /** @description A location record that contains information about the location of a device when an action was performed in an inspection. */
-        Location: {
-            /**
-             * @description The accuracy of the GPS data.
-             * @example 5
-             */
-            accuracy: number;
-            /**
-             * @description The altitude of this location.
-             * @example 30
-             */
-            altitude: number | null;
-            /**
-             * @description The city of this location.
-             * @example San Francisco
-             */
-            city?: string;
-            /**
-             * @description The country code of this location.
-             * @example US
-             */
-            country?: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The formatted address of this location.
-             * @example 30 Main St, San Francisco, CA 94105
-             */
-            formatted_address?: string;
-            /**
-             * @description The id of the location record.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description The latitude of this location.
-             * @example 37.7749
-             */
-            latitude: number;
-            /**
-             * @description The longitude of this location.
-             * @example -122.4194
-             */
-            longitude: number;
-            /**
-             * @description The postal code of this location.
-             * @example 94105
-             */
-            postal_code?: string;
-            /**
-             * @description The source of the location data.
-             * @example system
-             */
-            source?: components["schemas"]["LocationSource"] | unknown;
-            /**
-             * @description Indicates if the GPS data is spoofed.
-             * @example not_spoofed
-             */
-            spoofed: components["schemas"]["LocationSpoofReason"];
-            /**
-             * @description The state of this location.
-             * @example CA
-             */
-            state?: string;
-            /**
-             * @description The street address of this location.
-             * @example 30 Main St
-             */
-            street_address?: string;
-            /**
-             * @description A timestamp from the GPS data.
-             * @example 2023-10-01T12:00:00Z
-             */
-            timestamp: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         /**
          * @description The source of the location data.
          * @enum {string}
@@ -9847,11 +8670,6 @@ export interface components {
              */
             slug?: string;
             /**
-             * @description The callback URL we send a request to on action / change in status of an inspection request
-             * @example https://api.qualitycapital.com/hooks/truepic
-             */
-            status_callback_url?: string;
-            /**
              * @description The url slug used to acquire the team's assets
              * @example coca-cola
              */
@@ -9976,21 +8794,6 @@ export interface components {
             provider: string;
             /** @description The identifier for the user */
             user_id: string;
-        };
-        /** @description A generic type for the fields applied to every table in the PSQL database. */
-        PsqlTimestamps: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
         };
         QuestionTruepicExampleItem: {
             accepted: boolean;
@@ -10135,6 +8938,578 @@ export interface components {
              * @example Acura of La Jolla
              */
             name: string;
+        };
+        SerializedInspection: {
+            ai_inspection_ready_result?: components["schemas"]["AIInspectionReadyResult"] | unknown;
+            /**
+             * @description The AI analysis result for this inspection.
+             * @example pass
+             */
+            ai_status?: components["schemas"]["VerificationResult"];
+            /** @description The details of the AI status for this inspection. This may include information about the criteria evaluation, any inconsistencies detected, and more. */
+            ai_status_details?: components["schemas"]["AIStatusDetails"];
+            /**
+             * @description The reason for the AI analysis result for this inspection.
+             * @example COMPLETE_WITH_NO_INCONSISTENCIES
+             */
+            ai_status_reason?: components["schemas"]["AIStatusReason"];
+            ai_user_criteria_result?: components["schemas"]["AIUserCriteriaResult"] | unknown;
+            alert: components["schemas"]["InspectionAlertResult"];
+            app_opened: unknown;
+            assigned_to_member_user: components["schemas"]["User"];
+            /**
+             * @description The id of the user this inspection is assigned to.
+             * @example 19
+             */
+            assigned_to_member_user_id: number;
+            /**
+             * Format: date-time
+             * @description The date/time the resource was created
+             * @example 2020-05-01T21:44:40.000Z
+             */
+            created_at: string;
+            created_by_member_user: components["schemas"]["User"];
+            /**
+             * @description The id of the member that created this inspection.
+             * @example 43
+             */
+            created_by_member_user_id: number;
+            /**
+             * @description The values for the custom fields defined in the inspection type. The order of the values must match the order of the custom fields defined in the inspection type.  If the value is optional then you can provide null for that value.
+             * @example [
+             *       "abc123",
+             *       "def123"
+             *     ]
+             */
+            custom_field_values: string[];
+            customer_address?: string | null;
+            customer_address_lat?: string | null;
+            customer_address_lng?: string | null;
+            /**
+             * Format: email
+             * @description The email address of the customer completing the inspection. Required if `send_methods.email` is `true`.
+             * @example kylorenxninja@gmail.com
+             */
+            customer_email_address?: string;
+            /**
+             * @description The first name of the customer completing the inspection.
+             * @example Kylo
+             */
+            customer_first_name?: string;
+            /**
+             * Format: ipv4, ipv6
+             * @description The IP address of the customer, recorded during the most recent photo capture inspection.
+             * @example 123.532.124.174
+             */
+            customer_ip_address?: string;
+            /**
+             * @description The last name of the customer completing the inspection.
+             * @example Ren
+             */
+            customer_last_name?: string;
+            /**
+             * @description The full name of the customer who will be completing the inspection. If specified, then `customer_first_name` and `customer_last_name` will not be provided.
+             * @example Kylo Ren
+             */
+            customer_name?: string;
+            /**
+             * @description The country code for the customer's phone number.
+             * @example US
+             */
+            customer_phone_country?: string;
+            /**
+             * Format: phone
+             * @description The mobile number of the customer completing the inspection. Required if `send_methods.text` is `true`.
+             * @example 3028675309
+             */
+            customer_phone_number?: string;
+            /**
+             * Format: date-time
+             * @description The date/time the inspection was deleted. `null` if not deleted.
+             * @example 2020-05-01T21:44:40.000Z
+             */
+            deleted_at?: string | null;
+            /**
+             * @description The ID of the user who deleted the inspection. `null` if not deleted or auto-deleted by the system.
+             * @example 19
+             */
+            deleted_by_user_id?: number | null;
+            devices: components["schemas"]["InspectionDeviceInfo"][];
+            /**
+             * Format: date-time
+             * @description The datetime an email automated reply was sent
+             * @example 2023-01-04 15:11:39.642
+             */
+            email_auto_reply_sent?: string;
+            group?: components["schemas"]["Group"];
+            /**
+             * @description The id of the group this inspection is for.
+             * @example 23
+             */
+            group_id?: number;
+            has_survey_available: boolean;
+            /**
+             * @description The id of the inspection request
+             * @example 1843
+             */
+            id: number;
+            insights: {
+                type: components["schemas"]["InspectionInsightType"];
+            }[];
+            /**
+             * @description A smart link to load the inspection in the Vision app. This link is generated by the Vision backend and is unique to the inspection.
+             * @example visionbytruepic.com/23AUkqg1xRb
+             */
+            inspection_link?: string;
+            /**
+             * @description Free-form inspection-ready criteria text. Max length 10KB.
+             * @example Capture all rooms and appliances.
+             */
+            inspection_ready_criteria_text?: string | null;
+            /**
+             * @description The id of the inspection status this inspection is in.
+             * @example 4
+             */
+            inspection_status_id: components["schemas"]["InspectionStatusId"];
+            /** @description An inspection type with attached list and message template set data */
+            inspection_type: {
+                /**
+                 * Format: date-time
+                 * @description The date/time the resource was created
+                 * @example 2020-05-01T21:44:40.000Z
+                 */
+                created_at: string;
+                /**
+                 * @description the id of the user who created this inspection type. References `users.id`
+                 * @example 2343
+                 */
+                created_by_member_user_id?: number;
+                /** @description The custom fields associated with this Inspection Type with any custom field values */
+                custom_fields: components["schemas"]["PopulatedCustomField"][];
+                /**
+                 * @deprecated
+                 * @description The details about customer unique id 2. This field still works in v2 but for v3 you must use `custom_fields` instead.
+                 * @example {
+                 *       "entry_method": "ENTRY_METHOD_TEXT",
+                 *       "is_enabled": true,
+                 *       "is_required": false,
+                 *       "label": "Custom ID 2"
+                 *     }
+                 */
+                customer_unique_id_2?: components["schemas"]["UniqueID2"];
+                /**
+                 * @deprecated
+                 * @description The entry method for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
+                 * @example Custom ID
+                 */
+                customer_unique_id_label?: string;
+                /**
+                 * @deprecated
+                 * @description The label for the customer unique id field. This field still works in v2 but for v3 you must use `custom_fields` instead.
+                 */
+                entry_method?: components["schemas"]["CustomFieldEntryMethods"];
+                /**
+                 * @description The id of the inspection type
+                 * @example 1843
+                 */
+                id: number;
+                /** @description The alert configuration that is used by this inspection type. */
+                inspection_alert_config?: components["schemas"]["InspectionAlertConfig"];
+                /**
+                 * @description The id of the inspection alert configuration that is used by this inspection type. References `inspection_alert_configs.id`
+                 * @example 539
+                 */
+                inspection_alert_config_id?: number;
+                /**
+                 * @description Optional inspection-ready criteria text for this inspection type.
+                 * @example Capture the VIN plate clearly and include a full odometer photo.
+                 */
+                inspection_ready_criteria_text?: string | null;
+                /**
+                 * @description Controls whether an address is required for the inspection or not
+                 * @example 1000
+                 */
+                is_address_required: boolean;
+                is_deleted: unknown;
+                /**
+                 * @description When true, the list associated with this inspection type cannot be changed
+                 * @example false
+                 */
+                is_list_locked: boolean;
+                /** @description The IETF language tag for the intended language of the inspection. Non-customizable text in emails will use the language specified here. */
+                language: components["schemas"]["LocalizationLanguages"];
+                /** @description The list associated with this Inspection Type */
+                list: {
+                    /**
+                     * Format: date-time
+                     * @description The date/time the resource was created
+                     * @example 2020-05-01T21:44:40.000Z
+                     */
+                    created_at: string;
+                    /**
+                     * @description The id of the user that created this list
+                     * @example 609
+                     */
+                    created_by_member_user_id?: number;
+                    /**
+                     * @description The groups of items in the list
+                     * @example {
+                     *       "grp1": {
+                     *         "name": "Group 2"
+                     *       }
+                     *     }
+                     */
+                    groups?: components["schemas"]["ListItemGroups"];
+                    /**
+                     * @description The id of the resource.
+                     * @example 1843
+                     */
+                    id: number;
+                    /**
+                     * @description The id of the inspection that this list belongs to
+                     * @example 6342
+                     */
+                    inspection_id?: number;
+                    inspection_types: components["schemas"]["InspectionType"][];
+                    is_deleted: unknown;
+                    items: components["schemas"]["ListItem"][];
+                    /**
+                     * @description The auto-generated name of the list.
+                     * @example List for Inspection 3527
+                     */
+                    name: string;
+                    /**
+                     * @description The id of the organization that this list belongs to
+                     * @example 52
+                     */
+                    organization_id: number;
+                    /**
+                     * @description The id of the team that this list belongs to
+                     * @example 66
+                     */
+                    team_id?: number;
+                    /**
+                     * @description The type of the list. Must be `EVENT_TEMPLATE`, `EVENT_INSTANCE`, `SURVEY_TEMPLATE`, or `SURVEY_INSTANCE`
+                     * @example EVENT_TEMPLATE
+                     */
+                    type: components["schemas"]["ListType"];
+                    /**
+                     * Format: date-time
+                     * @description The date/time the resource was last updated
+                     * @example 2020-05-01T21:44:40.000Z
+                     */
+                    updated_at: string;
+                };
+                /**
+                 * @description The id of the list that is used by this inspection type. References `lists.id`
+                 * @example 3345
+                 */
+                list_id?: number;
+                /**
+                 * @description the maximum distance away from the configured inspection address that an inspection can be completed in meters.
+                 * @example 1000
+                 */
+                max_distance_from_address_threshold?: number;
+                /** @description The message template set associated with this Inspection Type */
+                message_template_set: components["schemas"]["MessageTemplateSet"];
+                /**
+                 * @description The id of the message template set that is used by this inspection type. References `message_template_sets.id`
+                 * @example 539
+                 */
+                message_template_set_id: number;
+                /**
+                 * @description the id of the user who last modified this inspection type. References `users.id`
+                 * @example 2343
+                 */
+                modified_by_member_user_id?: number;
+                /**
+                 * @description The name of the inspection type
+                 * @example My Type
+                 */
+                name: string;
+                /**
+                 * @description the id of the organization that this inspection type belongs to. References `organizations.id`.
+                 * @example 14
+                 */
+                organization_id: number;
+                /** @description The outcome set that is used by this inspection type. */
+                outcome_set?: components["schemas"]["OutcomeSet"];
+                /**
+                 * @description The id of the outcome set that is used by this inspection type. References `outcome_sets.id`
+                 * @example 539
+                 */
+                outcome_set_id?: number;
+                /**
+                 * @deprecated
+                 * @description the id of the team that this inspection type belongs to. References `teams.id`. Note that this is no longer used, and inspection types can now be associated with multiple teams
+                 * @example 124
+                 */
+                team_id: number;
+                /** @description The the teams that use this inspection type. */
+                teams?: {
+                    /**
+                     * @description The id of the resource
+                     * @example 1843
+                     */
+                    id: number;
+                    /**
+                     * @description The name of the team.
+                     * @example Claims
+                     */
+                    name?: string;
+                }[];
+                /**
+                 * Format: date-time
+                 * @description The date/time the resource was last updated
+                 * @example 2020-05-01T21:44:40.000Z
+                 */
+                updated_at: string;
+                /**
+                 * @description When true, there is only one name for the user to fill out rather than a separate first name and last name field
+                 * @example true
+                 */
+                use_single_name_field: boolean;
+            };
+            /**
+             * @description The id of the inspection type this inspection is for.
+             * @example 12
+             */
+            inspection_type_id: number;
+            is_deleted: unknown;
+            is_expired: unknown;
+            list: {
+                /**
+                 * @description The groups of items in the list
+                 * @example {
+                 *       "grp1": {
+                 *         "name": "Group 2"
+                 *       }
+                 *     }
+                 */
+                groups?: components["schemas"]["ListItemGroups"];
+                /**
+                 * @description The id of the resource.
+                 * @example 1843
+                 */
+                id: number;
+                items: components["schemas"]["InspectionListItemWithPhotos"][];
+                /**
+                 * @description The auto-generated name of the list.
+                 * @example List for Inspection 3527
+                 */
+                name: string;
+            };
+            locations: components["schemas"]["PopulatedLocation"][];
+            /**
+             * @description The maximum distance, in meters, from the address that the photos/videos must be taken in order to be valid
+             * @example 1000
+             */
+            max_distance_from_address_threshold?: number;
+            /**
+             * @description The message supplement (custom note) to be attached to the request text/email. Maximum length of 255 characters.
+             * @example Please complete in a timely manner
+             */
+            message_supplement?: string;
+            organization: components["schemas"]["Organization"];
+            organization_enabled_features: components["schemas"]["OrganizationEnabledFeature"][];
+            /**
+             * @description The id of the organization this inspection is for.
+             * @example 117
+             */
+            organization_id: number;
+            organization_team: components["schemas"]["Team"];
+            outcome?: components["schemas"]["Outcome"];
+            /**
+             * @description The id of the outcome of this inspection.
+             * @example 29
+             */
+            outcome_id?: number;
+            /**
+             * @description The reason for the outcome of this inspection
+             * @example Customer cancelled their service with our company
+             */
+            outcome_reason?: string;
+            photo_counts: unknown;
+            /**
+             * Format: date-time
+             * @description The date/time when the last photo/video was uploaded. ISO 8601 format.
+             * @example 2020-05-01T21:44:40.000Z
+             */
+            photo_uploaded_at?: string;
+            photos: components["schemas"]["InspectionTruepic"][];
+            /** @description The platform of our app that the inspection will be / has been performed on. */
+            platform?: components["schemas"]["InspectionPlatform"];
+            /**
+             * Format: date-time
+             * @description The date/time (in UTC) the inspection is scheduled to be sent to the customer
+             * @example 2020-05-01T21:44:40.000Z
+             */
+            scheduled_for?: string;
+            /**
+             * @description The IANA timezone name for the inspection's scheduled datetime. Used only for display purposes, as `scheduled_for` is in UTC.
+             * @example America/New_York
+             */
+            scheduled_tz?: string;
+            /** @description The method(s) to send the inspection request to the customer completing the inspection. */
+            send_methods: {
+                /**
+                 * @description When true, will send text messages to the customer_email_address
+                 * @example false
+                 */
+                email: boolean;
+                /**
+                 * @description When true, will send text messages to the customer_phone_number
+                 * @example true
+                 */
+                text: boolean;
+            };
+            /**
+             * @description Times to send automated finish reminders
+             * @example [
+             *       "10m",
+             *       "20m",
+             *       "30m"
+             *     ]
+             */
+            sent_auto_finish_reminders?: string[];
+            /**
+             * @description Times to send automated reminders
+             * @example [
+             *       "10m",
+             *       "20m",
+             *       "30m"
+             *     ]
+             */
+            sent_auto_reminders?: string[];
+            /**
+             * Format: date-time
+             * @description The datetime an sms automated reply was sent
+             * @example 2023-01-04 15:11:39.642
+             */
+            sms_auto_reply_sent?: string;
+            status: components["schemas"]["InspectionStatus"];
+            /**
+             * @description The id of the team this inspection is for.
+             * @example 182
+             */
+            team_id: number;
+            timeline: {
+                action_type: components["schemas"]["TimelineActionType"];
+                /**
+                 * Format: date-time
+                 * @description The date/time the resource was created
+                 * @example 2020-05-01T21:44:40.000Z
+                 */
+                created_at: string;
+                /**
+                 * @description The id of the app user that performed this action
+                 * @example 4335
+                 */
+                customer_user_id?: number;
+                /** @description An object containing any additional data related to the action. */
+                data?: {
+                    /** @description The flags and comment applied for the ACTION_DEVICE_FLAGS_CHANGED activity */
+                    flags?: {
+                        /** @description The comment to apply to the activity log for this flag action. */
+                        comment?: string;
+                        /** @description The complete list of flags to apply to the device for this inspection. This will update the list of flags to match this array by adding and/or removing any existing flags. */
+                        flags: components["schemas"]["DeviceFlagType"][];
+                    };
+                    /**
+                     * @description Whether the full message was sent
+                     * @example true
+                     */
+                    is_details_full_message?: boolean;
+                    /**
+                     * @description The id of the associated list item
+                     * @example 12345
+                     */
+                    list_item_id?: number;
+                    /** @description An optional location associated with the action */
+                    location?: components["schemas"]["LensActivityLocationData"];
+                    /**
+                     * @description The Sendgrid email message id of the associated message
+                     * @example DGnO3FNol23452ewf9v-7786453638cc-xx435l-1-646B123C-53.0
+                     */
+                    message_id?: string;
+                    /**
+                     * @description If the action was triggered by a Lens activity, this will contain details about the activity
+                     * @example timestamp_old
+                     */
+                    reason?: string;
+                    /** @description An array of tag strings describing an activity */
+                    tags?: string[];
+                    /**
+                     * @description The id of the associated Truepic
+                     * @example 12345
+                     */
+                    truepic_id?: number;
+                };
+                /** @description Any additional information, such as a member's custom message or more descriptive text. */
+                details?: number | null;
+                /** @description The id of the device fingerprint record */
+                device_fingerprint_details_request_id?: string;
+                /**
+                 * @description The id of the device record
+                 * @example 1843
+                 */
+                device_id?: number;
+                /**
+                 * @description The determined status of the fingerprint data.
+                 * @example VALID
+                 */
+                device_validation_status?: components["schemas"]["DeviceValidationStatus"];
+                /**
+                 * @description The id of the resource.
+                 * @example 1843
+                 */
+                id: number;
+                /**
+                 * @description The id of the inspection this action occurred on
+                 * @example 4335
+                 */
+                inspection_id: number;
+                is_deleted?: unknown;
+                location: components["schemas"]["PopulatedLocation"];
+                /**
+                 * @description The id of the location record
+                 * @example 12345
+                 */
+                location_id?: number;
+                /**
+                 * @description The id of the dashboard user that performed this action
+                 * @example 4335
+                 */
+                member_user_id?: number;
+                /** @description Any meta information, such as the URL when a new smart link is generated. */
+                meta?: string;
+                /**
+                 * @description The id of the action type
+                 * @example 12
+                 */
+                timeline_action_type_id?: number;
+                /**
+                 * Format: date-time
+                 * @description The date/time the resource was last updated
+                 * @example 2020-05-01T21:44:40.000Z
+                 */
+                updated_at: string;
+            }[];
+            /**
+             * Format: date-time
+             * @description The date/time the resource was last updated
+             * @example 2020-05-01T21:44:40.000Z
+             */
+            updated_at: string;
+            /**
+             * @description The aggregate verification result of all photos/videos
+             * @example pass
+             */
+            verification_result?: components["schemas"]["VerificationResult"];
+            organization_token_status: {
+                expires?: number | null;
+                is_valid: boolean;
+            };
         };
         /** @description A user object that's been serialized for the client. This is usually the object returned from the API and is used for client-side rendering. */
         SerializedUser: {
@@ -10494,11 +9869,6 @@ export interface components {
              */
             slug?: string;
             /**
-             * @description The callback URL we send a request to on action / change in status of an inspection request
-             * @example https://api.qualitycapital.com/hooks/truepic
-             */
-            status_callback_url?: string;
-            /**
              * @description The url slug used to acquire the team's assets
              * @example coca-cola
              */
@@ -10692,11 +10062,6 @@ export interface components {
              */
             slug?: string;
             /**
-             * @description The callback URL we send a request to on action / change in status of an inspection request
-             * @example https://api.qualitycapital.com/hooks/truepic
-             */
-            status_callback_url?: string;
-            /**
              * @description The url slug used to acquire the team's assets
              * @example coca-cola
              */
@@ -10708,73 +10073,6 @@ export interface components {
              */
             updated_at?: string;
             video_enabled?: unknown;
-        };
-        /** @description A configuration object for a webhook triggered for a team when an inspection is updated */
-        TeamWebhook: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description An object containing any custom headers that should be sent in the webhook POST request. If you want a unique request id header to be sent, create a header with a value of "{{ UUID }}". When the webhook is sent, this will be replaced with a unique UUID for each request.
-             * @example {
-             *       "x-api-resource": "truepic",
-             *       "x-request-id": "{{ UUID }}"
-             *     }
-             */
-            custom_headers?: Record<string, never> | unknown;
-            /**
-             * Format: date-time
-             * @description The timestamp when this webhook was disabled.
-             * @example 2023-06-01 17:12:20.097233+00
-             */
-            disabled_at?: string | null;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description Whether or not to use Mutual TLS when sending the webhook POST request.  This is an additional security measure that requires the receiving service to present a valid TLS certificate and to verify our API server's certificate before accepting the request.
-             * @default false
-             * @example false
-             */
-            mutual_tls: boolean;
-            /**
-             * @description The id of the organization.
-             * @example 1
-             */
-            organization_id: number;
-            /**
-             * @description The encrypted string sent with webhook POST requests. Used for authentication with the organization's receiving service.
-             * @example WMHadsfgYQ+348BEPcoyucKSaerwgq34gq34grstXp62P0Svn5VyEAGCKXM+CKcaw==
-             */
-            secret_encrypted?: string | null;
-            /**
-             * @description The id of the team. Each team can have only one webhook.
-             * @example 12
-             */
-            team_id: number;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-            /**
-             * Format: url
-             * @description The url that the webhook POST request is sent to.
-             * @example https://webhook.site/7a126f8d-6f8d-486f-8116-c92088360fe7
-             */
-            url: string;
-            /**
-             * @description The API version used to send the webhook POST request. Determines the terminology (v2 or v3) sent.
-             * @default v3
-             * @example v3
-             */
-            vision_api_version: components["schemas"]["VisionAPIVersion"];
         };
         TeamWebhookDBPayload: {
             /**
@@ -11037,61 +10335,6 @@ export interface components {
              */
             text_matching_set_id: number;
         }[];
-        /** @description A set of possible strings that the content analysis will look for in the OCR result * */
-        TextMatchingSet: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the user that created this text matching set.
-             * @example 894
-             */
-            created_by_user_id: number;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            is_deleted: unknown;
-            /**
-             * @description The id of the user that last edited this text matching set.
-             * @example 542
-             */
-            modified_by_user_id?: number;
-            /**
-             * @description The name of the text matching set
-             * @example Text Matching Set Name
-             */
-            name: string;
-            /**
-             * @description The id of the organization that owns this text matching set
-             * @example 532
-             */
-            organization_id: number;
-            /**
-             * @description The available options in this text matching set
-             * @example [
-             *       "String 1",
-             *       "String 2",
-             *       "String 3"
-             *     ]
-             */
-            strings: string[];
-            /**
-             * @description The type of text matching set
-             * @example Serial Number
-             */
-            type: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-        };
         TextMatchingSetExpectedValues: {
             /**
              * @description The id of the resource.
@@ -11118,107 +10361,6 @@ export interface components {
              * @example Serial Number
              */
             type: string;
-        };
-        /** @description An action that occurred on an inspection. These appear in the inspection timeline and some will trigger webhooks for the team associated with the inspection. */
-        TimelineAction: {
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The id of the app user that performed this action
-             * @example 4335
-             */
-            customer_user_id?: number;
-            /** @description An object containing any additional data related to the action. */
-            data?: {
-                /** @description The flags and comment applied for the ACTION_DEVICE_FLAGS_CHANGED activity */
-                flags?: {
-                    /** @description The comment to apply to the activity log for this flag action. */
-                    comment?: string;
-                    /** @description The complete list of flags to apply to the device for this inspection. This will update the list of flags to match this array by adding and/or removing any existing flags. */
-                    flags: components["schemas"]["DeviceFlagType"][];
-                };
-                /**
-                 * @description Whether the full message was sent
-                 * @example true
-                 */
-                is_details_full_message?: boolean;
-                /**
-                 * @description The id of the associated list item
-                 * @example 12345
-                 */
-                list_item_id?: number;
-                /** @description An optional location associated with the action */
-                location?: components["schemas"]["LensActivityLocationData"];
-                /**
-                 * @description The Sendgrid email message id of the associated message
-                 * @example DGnO3FNol23452ewf9v-7786453638cc-xx435l-1-646B123C-53.0
-                 */
-                message_id?: string;
-                /**
-                 * @description If the action was triggered by a Lens activity, this will contain details about the activity
-                 * @example timestamp_old
-                 */
-                reason?: string;
-                /** @description An array of tag strings describing an activity */
-                tags?: string[];
-                /**
-                 * @description The id of the associated Truepic
-                 * @example 12345
-                 */
-                truepic_id?: number;
-            };
-            /** @description Any additional information, such as a member's custom message or more descriptive text. */
-            details?: number | null;
-            /** @description The id of the device fingerprint record */
-            device_fingerprint_details_request_id?: string;
-            /**
-             * @description The id of the device record
-             * @example 1843
-             */
-            device_id?: number;
-            /**
-             * @description The determined status of the fingerprint data.
-             * @example VALID
-             */
-            device_validation_status?: components["schemas"]["DeviceValidationStatus"];
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description The id of the inspection this action occurred on
-             * @example 4335
-             */
-            inspection_id: number;
-            is_deleted?: unknown;
-            /**
-             * @description The id of the location record
-             * @example 12345
-             */
-            location_id?: number;
-            /**
-             * @description The id of the dashboard user that performed this action
-             * @example 4335
-             */
-            member_user_id?: number;
-            /** @description Any meta information, such as the URL when a new smart link is generated. */
-            meta?: string;
-            /**
-             * @description The id of the action type
-             * @example 12
-             */
-            timeline_action_type_id?: number;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
         };
         /** @description A type of action that can occur an inspection. */
         TimelineActionType: {
@@ -11249,262 +10391,6 @@ export interface components {
              * @example 2020-05-01T21:44:40.000Z
              */
             updated_at: string;
-        };
-        /** @description A photo or video (if enabled for the organization) from an inspection request. */
-        Truepic: {
-            /**
-             * @description The accuracy of the GPS coordinates in meters.
-             * @example 165
-             */
-            accuracy?: number;
-            /**
-             * @description Whether the AI analysis test is complete for this Truepic.
-             * @example true
-             */
-            ai_analysis_done?: boolean;
-            /**
-             * @description The status of an AI analysis test on this Truepic.
-             * @example P
-             */
-            ai_analysis_status: components["schemas"]["TestResult"];
-            archived: unknown;
-            /**
-             * @description The status of a blockchain test on this Truepic.
-             * @example P
-             */
-            blockchain_status: components["schemas"]["TestResult"];
-            /**
-             * @description The status of a capture integrity test on this Truepic.
-             * @example P
-             */
-            capture_integrity_status: components["schemas"]["TestResult"];
-            /**
-             * @description The city where the photo/video was taken, based on GPS coordinates.
-             * @example La Jolla
-             */
-            city?: string;
-            /**
-             * @description The comment attached to the Truepic
-             * @example Hello
-             */
-            comment?: string;
-            /**
-             * @description The id of the container this Truepic is part of
-             * @example 10
-             */
-            container_id: number;
-            /**
-             * @description The status of a content analysis test on this Truepic.
-             * @example P
-             */
-            content_analysis_status: components["schemas"]["TestResult"];
-            /**
-             * Format: date-time
-             * @description The date/time the resource was created
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            created_at: string;
-            /**
-             * @description The status of a datetime test on this Truepic.
-             * @example P
-             */
-            datetime_status: components["schemas"]["TestResult"];
-            /**
-             * @description The status of a device integrity test on this Truepic.
-             * @example P
-             */
-            device_integrity_status: components["schemas"]["TestResult"];
-            /**
-             * Format: date-time
-             * @description The date/time of the device when the photo/video was captured. ISO 8601 format.
-             * @example 2018-08-06T15:29:47.000Z
-             */
-            device_time: string;
-            /**
-             * @description The video duration of this Truepic, if it is a video.
-             * @example 0:00:30
-             */
-            duration?: string;
-            /**
-             * @description The formatted address where the photo/video was taken, based on GPS coordinates.
-             * @example 7817 Ivanhoe Avenue, La Jolla, CA 92037
-             */
-            formatted_address?: string;
-            /**
-             * @description The status of a geolocation test on this Truepic.
-             * @example P
-             */
-            geolocation_status: components["schemas"]["TestResult"];
-            /**
-             * @description The unix timestamp of the GPS where the capture was taken.
-             * @example 555262184.034417
-             */
-            gps_ts?: string;
-            /**
-             * @description The direction the device was facing when the photo/video was taken. `0.0` is magnetic north.
-             * @example 220.48
-             */
-            heading?: number;
-            /**
-             * @description The id of the resource.
-             * @example 1843
-             */
-            id: number;
-            /**
-             * @description A URL to a scaled-down version of the image.
-             * @example https://d3tbfdtihunht2.cloudfront.net/qfzkoxugjn_f.jpg?...
-             */
-            image?: string;
-            /**
-             * @description The id of the inspection this Truepic is associated with.
-             * @example 6522
-             */
-            inspection_id: number;
-            /**
-             * @description An internal note by a dashboard user attached to this Truepic
-             * @example Looks damaged.
-             */
-            internal_note?: string;
-            is_deleted: unknown;
-            is_rooted: unknown;
-            /**
-             * @description The GPS latitude where the photo/video was taken.
-             * @example 33.5565051716316
-             */
-            lat: string;
-            lens_transfer_done: unknown;
-            /**
-             * @description The GPS longitude where the photo/video was taken.
-             * @example 33.5565051716316
-             */
-            lng: string;
-            /**
-             * @description The localized timestamp of the capture of the Truepic
-             * @example 6/14/23 4:02pm EDT
-             */
-            local_ts: string;
-            /**
-             * @description The make of the device that captured this Truepic
-             * @example Apple
-             */
-            make?: string;
-            /**
-             * @description The md5 hash of the Truepic signature
-             * @example 900edbargawerfgaerwgd8a2c76ab2
-             */
-            md5_hash?: string;
-            /**
-             * @description The media digest of the Truepic
-             * @example 001183fw23f2w3fwergdsghr2q35aaada5wefw234f23rfw23wec13af441e6b
-             */
-            media_digest?: string;
-            /**
-             * @description The model of the device that captured this Truepic
-             * @example iPhone 7
-             */
-            model?: string;
-            /**
-             * @description Whether the object detection test is complete for this Truepic.
-             * @example true
-             */
-            object_detection_done?: boolean;
-            /**
-             * @description The status of an object detection test on this Truepic.
-             * @example P
-             */
-            object_detection_status: components["schemas"]["TestResult"];
-            /**
-             * @description A URL to the original image.
-             * @example https://d3tbfdtihunht2.cloudfront.net/qfzkoxugjn_o.jpg?...
-             */
-            original_image?: string;
-            /**
-             * @description The version of the operating system that captured this Truepic
-             * @example 11.4.1
-             */
-            os?: string;
-            pending_upload: unknown;
-            /**
-             * @description The photo list id this Truepic is a part of
-             * @example 5678
-             */
-            photo_list_id?: number;
-            /**
-             * @description The status of a picture-of-paper test on this Truepic.
-             * @example P
-             */
-            pop_status: components["schemas"]["TestResult"];
-            /**
-             * @description The time at which all processing (RIS, Object Detection, Content Analysis, AI Analysis, etc) from Vision and Lens was completed. NULL if incomplete.
-             * @example 2018-08-07 13:16:15
-             */
-            processing_completed_at?: string;
-            /**
-             * @description The status of a reverse-image-search test on this Truepic.
-             * @example P
-             */
-            ris_status: components["schemas"]["TestResult"];
-            /**
-             * @description The platform on which this Truepic was captured
-             * @example Android
-             * @enum {string}
-             */
-            sdk_platform?: "ios" | "Android";
-            /**
-             * @description The version of the SDK on which this Truepic was captured.
-             * @example 2.0.6
-             */
-            sdk_version?: string;
-            /**
-             * @description The sha 256 hash of the Truepic signature
-             * @example 900edbargawerfgaeawdefq34fawedfgadfghadfghaerghae5rtb2
-             */
-            shas256_hash?: string;
-            /**
-             * @description A URL to a thumbnail of the image.
-             * @example https://d3tbfdtihunht2.cloudfront.net/qfzkoxugjn_s.mp4?...
-             */
-            square_image?: string;
-            /**
-             * @description The state where the photo/video was taken, based on GPS coordinates.
-             * @example CA
-             */
-            state?: string;
-            status_overridden: unknown;
-            /**
-             * @description The timestamp of the capture of the Truepic
-             * @example 2018-08-07 13:16:15
-             */
-            ts: string;
-            /**
-             * @description The type of capture
-             * @example image
-             * @enum {string}
-             */
-            type?: "image" | "video";
-            /**
-             * @description The timezone where the Truepic was taken
-             * @example America/Phoenix
-             */
-            tz: string;
-            /**
-             * Format: date-time
-             * @description The date/time the resource was last updated
-             * @example 2020-05-01T21:44:40.000Z
-             */
-            updated_at: string;
-            /**
-             * @description The username of the capturer of the Truepic
-             * @example Apple
-             */
-            username: string;
-            /** @description The unique alphanumeric identifier of the photo/video. */
-            verification_code: string;
-            /**
-             * @description A URL to a web-optimized version of the image.
-             * @example https://d3tbfdtihunht2.cloudfront.net/qfzkoxugjn_w.jpg?...
-             */
-            web_image?: string;
         };
         UniqueID2: {
             /** @description The id of the custom field option set used by this custom field when the entry method is ENTRY_METHOD_SELECTABLE */
@@ -11820,25 +10706,6 @@ export interface components {
              * @example Claims
              */
             name?: string;
-            /** @description Array of phone numbers to update for the team */
-            phone_numbers?: {
-                /**
-                 * @description The country code for this phone number.
-                 * @example US
-                 */
-                country: string;
-                /**
-                 * @description The id of the team phone number record
-                 * @example 1843
-                 */
-                id: number;
-                /**
-                 * Format: phone
-                 * @description The phone number used to send text messages for inspection requests.
-                 * @example 15162711526
-                 */
-                phone_number: string;
-            }[];
         };
         /** @description The response body for the PUT /teams/{teamId} endpoint */
         UpdateTeamResult: {
@@ -12021,6 +10888,7 @@ export interface components {
         WebsiteFormInspectionSerialized: {
             can_email: boolean;
             can_text: boolean;
+            id: number;
             link: string;
             token: string;
             token_expires_at: number;
