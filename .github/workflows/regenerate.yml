@@ -1,0 +1,117 @@
+name: Regenerate types from vision-api
+run-name: |
+  Regenerating @truepic/vision-api-types
+
+on:
+  repository_dispatch:
+    types: [vision-api-deployed]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 3.76.0 or v3.76.0)"
+        required: true
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+
+      - run: npm ci
+
+      - name: Resolve target version
+        id: ver
+        env:
+          PAYLOAD_VERSION: ${{ github.event.client_payload.version }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          RAW="${PAYLOAD_VERSION:-$INPUT_VERSION}"
+          if [ -z "$RAW" ]; then
+            echo "No version provided" >&2
+            exit 1
+          fi
+          echo "version=${RAW#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for production schema to match target version
+        env:
+          TARGET: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 30); do
+            REMOTE=$(curl -fsSL https://vision-api.truepic.com/v3/open-api | jq -r '.info.version')
+            echo "Attempt $attempt: remote=$REMOTE target=$TARGET"
+            if [ "$REMOTE" = "$TARGET" ]; then
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Production schema did not reach version $TARGET in time" >&2
+          exit 1
+
+      - name: Regenerate types
+        run: npm run generate
+
+      - name: Validate
+        run: npm run validate
+
+      - name: Detect changes
+        id: diff
+        env:
+          TARGET: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          CURRENT=$(node -p "require('./package.json').version")
+          if git diff --quiet index.d.ts && [ "$CURRENT" = "$TARGET" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set version to match vision-api
+        if: steps.diff.outputs.skip == 'false'
+        run: npm version "${{ steps.ver.outputs.version }}" --no-git-tag-version --allow-same-version
+
+      - name: Commit and tag
+        if: steps.diff.outputs.skip == 'false'
+        env:
+          V: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.d.ts package.json
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "v${V}"
+          fi
+          if git rev-parse "v${V}" >/dev/null 2>&1; then
+            echo "Tag v${V} already exists"
+          else
+            git tag -a "v${V}" -m "v${V}"
+          fi
+          git push origin HEAD --follow-tags
+
+      - name: Publish to npm
+        if: steps.diff.outputs.skip == 'false'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub release
+        if: steps.diff.outputs.skip == 'false'
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: v${{ steps.ver.outputs.version }}
